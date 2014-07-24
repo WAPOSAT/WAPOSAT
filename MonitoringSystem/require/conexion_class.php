@@ -9,12 +9,19 @@ class conexion {
 	public function __construct () {
 		
         // configuracion para localhost de JOTA I
-        $this->_conexion = mysql_connect("localhost", "root", "jibf123");
+        
+        $this->_conexion = mysql_connect("localhost", "root", "jibf123") or die('No pudo conectarse: ' . mysql_error());
 		$this->_base_datos = mysql_select_db("DB_waposat");
         
         
+        // configuracion para el servidor
+        /*
+        $this->_conexion = mysql_connect("localhost", "JIBF", "jibf123") or die('No pudo conectarse: ' . mysql_error());
+		$this->_base_datos = mysql_select_db("DB_waposat");
+        */
+        
         // configuracion para el raspberry
-        /*$this->_conexion = mysql_connect("localhost", "root", "teclado");
+        /*$this->_conexion = mysql_connect("localhost", "root", "teclado") or die('No pudo conectarse: ' . mysql_error());
 		$this->_base_datos = mysql_select_db("initec");*/
         
 	}

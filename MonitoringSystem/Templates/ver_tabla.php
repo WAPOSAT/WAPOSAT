@@ -5,7 +5,7 @@ $id_equipo = 1;
 $id_sensor = 1;
 
 $monitoreo = new monitoreo();
-$monitoreo->mostrar_valores($id_sensor, $id_equipo, 2000);
+$monitoreo->mostrar_valores($id_sensor, $id_equipo, 20);
 
 ?>
 

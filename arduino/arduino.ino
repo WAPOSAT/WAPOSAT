@@ -10,9 +10,12 @@
 #include <Ethernet.h>
 
 byte mac[] = {  0x90, 0xA2, 0xDA, 0x0E, 0x08, 0x82 }; // MAC de la tarjeta ethernet shield
-byte ip[] = { 192,168,1,3 }; // Direccion ip local
-byte server[] = { 192,168,1,1}; // Direccion ip del servidor
-
+byte ip[] = { 172,16,13,198}; // Direccion ip local
+byte gateway[]= { 172,16,13,254};
+byte subnet[] = {255,255,255,0};
+//byte server[] = { 172,16,13,157};
+//byte server[] = { 23,229,209,7}; // Direccion ip del servidor
+char server[] = "arduinobarato.com";
 EthernetClient client;
 
 float value;
@@ -24,7 +27,8 @@ const int inPin = 0;  // sensor conectado a la entrada analoga 0
 void setup()
 {
   Serial.begin(9600);
-  Ethernet.begin(mac, ip); // inicializa ethernet shield
+  Ethernet.begin(mac, ip, subnet, gateway); // inicializa ethernet shield
+//    Ethernet.begin(mac, ip);
   delay(1000); // espera 1 segundo despues de inicializar
 }
 
@@ -55,5 +59,5 @@ void loop()
   }
   client.stop();
   client.flush();
-  delay(2000); // espera 5 minutos antes de volver a sensar la temperatura
+  delay(10000); // espera 5 minutos antes de volver a sensar la temperatura0
 }
