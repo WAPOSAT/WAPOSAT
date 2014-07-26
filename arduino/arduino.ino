@@ -14,8 +14,10 @@ byte ip[] = { 172,16,13,198}; // Direccion ip local
 byte gateway[]= { 172,16,13,254};
 byte subnet[] = {255,255,255,0};
 //byte server[] = { 172,16,13,157};
-//byte server[] = { 23,229,209,7}; // Direccion ip del servidor
-char server[] = "arduinobarato.com";
+//byte server[] = { 23,229,209,7}; // Servidor Goddady
+byte server[] = { 54,94,152,175};  // Servidor AWS
+
+//char server[] = "arduinobarato.com";
 EthernetClient client;
 
 float value;
@@ -42,9 +44,12 @@ void loop()
   Serial.println("Conectando..");
 
   if (client.connect(server,80)>0) {  // Se conecta al servidor
-    client.print("GET /WAPOSAT/MonitoringSystem/Templates/arduino.php?sensor=1&equipo=1&valor="); // Envia los datos utilizando GET
+    client.print("GET /MonitoringSystem/Templates/arduino.php?sensor=1&equipo=1&valor="); // Envia los datos utilizando GET
     client.print(celsius);
-    client.println(" HTTP/1.0");
+    client.println(" HTTP/1.1");
+    client.println("Host: 54.94.152.175");
+    client.println("Content-Type: application/x-www-form-urlencoded");
+    client.println("Connection: close");
     client.println("User-Agent: Arduino 1.0");
     client.println();
     Serial.println("Conexion exitosa");
