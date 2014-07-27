@@ -29,18 +29,21 @@ $(function () {
                         var series = this.series[0];
                         setInterval(function() {
                             var x = (new Date()).getTime(), // current time
-                                y = Math.random()*1+50;
+                                y = Math.random()*1+18;
                                 //series = this.series[0];
-                            series.addPoint([x, y],true,true);
+    
+                        // Add it
+                                series.addPoint([x, y]);
                         }, 1000); // es la velocidad de creacion de un nuevo punto
+                        
                     }
                 }
             },
             title: {
-                text: 'Sistema de medidas'
+                text: 'Sistema de Monitoreo en Tiempo Real'
             },
             subtitle: {
-                text: 'Click the plot area to add a point. Click a point to remove it.'
+                text: 'Las graficas muestran los datos de temperatura que se estan midiendo en su punto deseado'
             },
             xAxis: {
                 type: 'datetime',
@@ -48,20 +51,67 @@ $(function () {
                 minPadding: 0,  // controla la posicion de inicio 
                 maxPadding: 0,  // controla la posicion de fin
                 maxZoom: 60,
-                tickPixelInterval: 50
+                tickPixelInterval: 150
             },
             yAxis: {
                 title: {
-                    text: 'Valor'
+                    text: 'Temperatura °C'
                 },
                 minPadding: 0.2,
                 maxPadding: 0.2,
-                maxZoom: 60,
+                maxZoom: 35,
                 plotLines: [{
                     value: 0,
-                    width: 1,
+                    width: 5,
                     color: '#808080'
-                }]
+                }],
+                min: 0,         // para establecer el valor minimo
+                minorGridLineWidth: 0,
+                gridLineWidth: 0,
+                alternateGridColor: null, // para poder alternar el color en el eje Y
+                plotBands: [
+                    { // Moderate breeze
+                    from: 5,
+                    to: 12,
+                    color: 'rgba(0, 0, 0, 0)',
+                    label: {
+                        text: 'Moderadamente frio',
+                        style: {
+                            color: '#606060'
+                        }
+                    }
+                }, {
+                    from: 12,
+                    to: 25,
+                    color: 'rgba(68, 170, 213, 0.2)',
+                    label: {
+                        text: 'Temperatura Normal',
+                        style: {
+                            color: '#606060'
+                        }
+                    }
+                }, { // Light breeze
+                    from: 25,
+                    to: 30,
+                    color: 'rgba(200, 100, 0, 0.3)',
+                    label: {
+                        text: 'Zona de Precaucion',
+                        style: {
+                            color: '#606060'
+                        }
+                    }
+                }, { // Gentle breeze
+                    from: 30,
+                    to: 50,
+                    color: 'rgba(180, 0, 0, 0.5)',
+                    label: {
+                        text: 'Zona de peligro',
+                        style: {
+                            color: '#606060'
+                        }
+                    }
+                }]         
+                           
             },
             legend: {
                 enabled: true
@@ -69,22 +119,9 @@ $(function () {
             exporting: {
                 enabled: false
             },
-            plotOptions: {
-                series: {
-                    lineWidth: 1,
-                    point: {
-                        events: {
-                            //'click': function() {
-                            'click': function() {
-                                if (this.series.data.length > 1) this.remove();
-                            }
-                        }
-                    }
-                }
-            },
             series: [{
                 name: 'Temperatura',
-               data: (function() {
+                data: (function() {
                     // generate an array of random data
                     var data = [],
                         time = (new Date()).getTime(),
@@ -93,12 +130,13 @@ $(function () {
                     for (i = -20; i <= 0; i++) {
                         data.push({
                             x: time + i * 1000,
-                            y: Math.random()*1+50
+                            y: Math.random()*1+18
                         });
                     }
                     return data;
                 })()
-            }]
+            }        
+                    ]
         });
     });
 });    
