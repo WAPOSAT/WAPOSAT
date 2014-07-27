@@ -17,28 +17,27 @@ $(function () {
             }
         });
     
-        var chart;
+        //var chart;
         $('#container').highcharts({
             chart: {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in old IE
-                marginRight: 10,
-                margin: [70, 50, 60, 80],
+                margin: [70, 50, 60, 80], // margenes del cuadro de datos
                 events: {
                     load: function() {
                         // set up the updating of the chart each second
                         var series = this.series[0];
                         setInterval(function() {
                             var x = (new Date()).getTime(), // current time
-                                y = Math.random()*2+50;
-                            //series = this.series[0];
+                                y = Math.random()*1+50;
+                                //series = this.series[0];
                             series.addPoint([x, y],true,true);
-                        }, 1000);
+                        }, 1000); // es la velocidad de creacion de un nuevo punto
                     }
                 }
             },
             title: {
-                text: 'Datos de Click'
+                text: 'Sistema de medidas'
             },
             subtitle: {
                 text: 'Click the plot area to add a point. Click a point to remove it.'
@@ -46,9 +45,10 @@ $(function () {
             xAxis: {
                 type: 'datetime',
                 gridLineWidth: 1,
-                minPadding: 0.2,
-                maxPadding: 0.2,
-                maxZoom: 60
+                minPadding: 0,  // controla la posicion de inicio 
+                maxPadding: 0,  // controla la posicion de fin
+                maxZoom: 60,
+                tickPixelInterval: 50
             },
             yAxis: {
                 title: {
@@ -71,7 +71,7 @@ $(function () {
             },
             plotOptions: {
                 series: {
-                    lineWidth: 5,
+                    lineWidth: 1,
                     point: {
                         events: {
                             //'click': function() {
@@ -84,7 +84,7 @@ $(function () {
             },
             series: [{
                 name: 'Temperatura',
-                data: (function() {
+               data: (function() {
                     // generate an array of random data
                     var data = [],
                         time = (new Date()).getTime(),
@@ -93,7 +93,7 @@ $(function () {
                     for (i = -20; i <= 0; i++) {
                         data.push({
                             x: time + i * 1000,
-                            y: Math.random()
+                            y: Math.random()*1+50
                         });
                     }
                     return data;
