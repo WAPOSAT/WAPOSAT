@@ -1,9 +1,3 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>Highcharts Example</title>
-
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		<style type="text/css">
 ${demo.css}
@@ -21,7 +15,7 @@ $(function () {
         });
     
         //var chart;
-        $('#container').highcharts({
+        $('#contenedorTemperatura').highcharts({
             chart: {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in old IE
@@ -34,7 +28,7 @@ $(function () {
                             var x = (new Date()).getTime(), // current time
                                 y = Math.random()*1+18;
                                 series.addPoint([x, y],true,true);                                
-                        }, 30000); // es la velocidad de creacion de un nuevo punto
+                        }, 15000); // es la velocidad de creacion de un nuevo punto
                         
                     }
                 }
@@ -55,7 +49,7 @@ $(function () {
             },
             yAxis: {
                 title: {
-                    text: 'Temperatura °C'
+                    text: 'Temperatura (Celsius)'
                 },
                 minPadding: 0.2,
                 maxPadding: 0.2,
@@ -127,9 +121,9 @@ $(function () {
                         time = (new Date()).getTime(),
                         i;
     
-                    for (i = -500; i <= 0; i++) {
+                    for (i = -300; i <= 0; i++) {
                         data.push({
-                            x: time + i * 30000,
+                            x: time + i * 15000,
                             y: Math.random()*1+18
                         });
                     }
@@ -141,15 +135,7 @@ $(function () {
 });    
 
 		</script>
-	
-	</head>
-	
-	<body>
 
 <div align="left" >
-<div id="container" style="height: 300px; width: 600px "></div>
+<div id="contenedorTemperatura" style="height: 300px; width: 600px "></div>
 </div>
-
-
-	</body>
-</html>

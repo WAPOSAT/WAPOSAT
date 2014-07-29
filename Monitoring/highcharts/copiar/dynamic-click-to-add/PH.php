@@ -1,9 +1,3 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>Highcharts Example</title>
-
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		<style type="text/css">
 ${demo.css}
@@ -21,7 +15,7 @@ $(function () {
         });
     
         //var chart;
-        $('#container').highcharts({
+        $('#contenedorPH').highcharts({
             chart: {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in old IE
@@ -32,15 +26,15 @@ $(function () {
                         var series = this.series[0];
                         setInterval(function() {
                             var x = (new Date()).getTime(), // current time
-                                y = Math.random()*1+18;
+                                y = Math.random()*0.5+7;
                                 series.addPoint([x, y],true,true);                                
-                        }, 30000); // es la velocidad de creacion de un nuevo punto
+                        }, 15000); // es la velocidad de creacion de un nuevo punto
                         
                     }
                 }
             },
             title: {
-                text: 'Temperatura en Tiempo Real'
+                text: 'PH en tiempo real'
             },
             /*subtitle: {
                 text: 'Las graficas muestran los datos de temperatura que se estan midiendo en su punto deseado'
@@ -55,57 +49,68 @@ $(function () {
             },
             yAxis: {
                 title: {
-                    text: 'Temperatura °C'
+                    text: 'PH'
                 },
                 minPadding: 0.2,
                 maxPadding: 0.2,
-                maxZoom: 30,
+                maxZoom: 10,
                 plotLines: [{
                     value: 0,
                     width: 5,
                     color: '#808080'
                 }],
                 min: 0,         // para establecer el valor minimo
+                max: 14,
                 minorGridLineWidth: 0,
                 gridLineWidth: 0,
                 alternateGridColor: null, // para poder alternar el color en el eje Y
                 plotBands: [
                     { // Moderate breeze
-                    from: 5,
-                    to: 12,
-                    color: 'rgba(0, 0, 0, 0)',
+                    from: 0,
+                    to: 3,
+                    color: 'rgba(180, 0, 0, 0.5)',
                     label: {
-                        text: 'Moderadamente frio',
+                        text: 'Solucion basica',
                         style: {
                             color: '#606060'
                         }
                     }
                 }, {
-                    from: 12,
-                    to: 25,
+                    from: 3,
+                    to: 6,
                     color: 'rgba(68, 170, 213, 0.2)',
                     label: {
-                        text: 'Temperatura Normal',
+                        text: 'Moderadamente basica',
                         style: {
                             color: '#606060'
                         }
                     }
                 }, { // Light breeze
-                    from: 25,
-                    to: 30,
-                    color: 'rgba(200, 100, 0, 0.3)',
+                    from: 6,
+                    to: 8,
+                    color: 'rgba(255, 0, 0, 0)',
                     label: {
-                        text: 'Zona de Precaucion',
+                        text: 'Solucion neutral',
                         style: {
                             color: '#606060'
                         }
                     }
                 }, { // Gentle breeze
-                    from: 30,
-                    to: 50,
+                    from: 8,
+                    to: 11,
+                    color: 'rgba(68, 170, 213, 0.2)',
+                    label: {
+                        text: 'Moderadamente acida',
+                        style: {
+                            color: '#606060'
+                        }
+                    }
+                }, { // Gentle breeze
+                    from: 11,
+                    to: 14,
                     color: 'rgba(180, 0, 0, 0.5)',
                     label: {
-                        text: 'Zona de peligro',
+                        text: 'Solucion acida',
                         style: {
                             color: '#606060'
                         }
@@ -120,17 +125,17 @@ $(function () {
                 enabled: false
             },
             series: [{
-                name: 'Temperatura',
+                name: 'Ph',
                 data: (function() {
                     // generate an array of random data
                     var data = [],
                         time = (new Date()).getTime(),
                         i;
     
-                    for (i = -500; i <= 0; i++) {
+                    for (i = -300; i <= 0; i++) {
                         data.push({
-                            x: time + i * 30000,
-                            y: Math.random()*1+18
+                            x: time + i * 15000,
+                            y: Math.random()*0.5+7
                         });
                     }
                     return data;
@@ -141,15 +146,7 @@ $(function () {
 });    
 
 		</script>
-	
-	</head>
-	
-	<body>
 
 <div align="left" >
-<div id="container" style="height: 300px; width: 600px "></div>
+<div id="contenedorPH" style="height: 300px; width: 600px "></div>
 </div>
-
-
-	</body>
-</html>
