@@ -1,10 +1,6 @@
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-		<script src="../../js/highcharts.js"></script>
-        <script src="../../js/modules/exporting.js"></script>
-
 		<script type="text/javascript">
 $(function () {
-        $('#container').highcharts({
+        $('#column-PH').highcharts({
             chart: {
                 type: 'column'
             },
@@ -57,4 +53,6 @@ $(function () {
     
 
 		</script>
-<div id="container" style="width: 500px; height: 300px; margin: 0 auto"></div>
+		<div aling="center">
+<div id="column-PH" style="width: 500px; height: 300px; margin: 0 0"></div>
+        </div>

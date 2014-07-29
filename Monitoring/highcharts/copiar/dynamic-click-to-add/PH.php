@@ -1,9 +1,3 @@
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-		<style type="text/css">
-${demo.css}
-		</style>
-		<script src="../../js/highcharts.js"></script>
-        <script src="../../js/modules/exporting.js"></script>
 
 		<script type="text/javascript">
 $(function () {
@@ -28,7 +22,7 @@ $(function () {
                             var x = (new Date()).getTime(), // current time
                                 y = Math.random()*0.5+7;
                                 series.addPoint([x, y],true,true);                                
-                        }, 15000); // es la velocidad de creacion de un nuevo punto
+                        }, 30000); // es la velocidad de creacion de un nuevo punto
                         
                     }
                 }
@@ -134,7 +128,7 @@ $(function () {
     
                     for (i = -300; i <= 0; i++) {
                         data.push({
-                            x: time + i * 15000,
+                            x: time + i * 30000,
                             y: Math.random()*0.5+7
                         });
                     }

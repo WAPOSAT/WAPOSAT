@@ -1,15 +1,12 @@
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-		<script src="../../js/highcharts.js"></script>
-        <script src="../../js/modules/exporting.js"></script>
 
 		<script type="text/javascript">
 $(function () {
-        $('#container').highcharts({
+        $('#column-Temperatura').highcharts({
             chart: {
                 type: 'column'
             },
             title: {
-                text: 'Media del PH Mensual'
+                text: 'Media de Temperatura Mensual'
             },
             /*subtitle: {
                 text: 'Source: WorldClimate.com'
@@ -28,9 +25,8 @@ $(function () {
             },
             yAxis: {
                 min: 0,
-                max: 14,
                 title: {
-                    text: 'Valor del PH'
+                    text: 'Media de Temperatura'
                 }
             },
             tooltip: {
@@ -48,8 +44,8 @@ $(function () {
                 }
             },
             series: [{
-                name: 'PH',
-                data: [7.3, 7.5, 7.9, 7.9, 7.5, 7.6, 7.1, 7.3]
+                name: 'Temperatura',
+                data: [25.3, 25.5, 25.9, 25.9, 25.5, 24.6, 24.1, 24.3]
     
             }]
         });
@@ -57,4 +53,4 @@ $(function () {
     
 
 		</script>
-<div id="container" style="width: 500px; height: 300px; margin: 0 auto"></div>
+<div id="column-Temperatura" style="width: 500px; height: 300px; margin: 0 0"></div>
