@@ -27,8 +27,8 @@
   
   
    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-		<script src="http://localhost/WAPOSAT/Monitoring/highcharts/js/highcharts.js"></script>
-        <script src="http://localhost/WAPOSAT/Monitoring/highcharts/js/modules/exporting.js"></script> 		
+		<script src="http://arduinobarato.com/WAPOSAT/Monitoring/highcharts/js/highcharts.js"></script>
+        <script src="http://arduinobarato.com/WAPOSAT/Monitoring/highcharts/js/modules/exporting.js"></script> 		
 
 		<script type="text/javascript">
 $(function () {
