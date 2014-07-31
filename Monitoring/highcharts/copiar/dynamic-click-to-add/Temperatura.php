@@ -12,14 +12,17 @@ $(function () {
             chart: {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in old IE
-                margin: [45, 10, 60, 50], // margenes del cuadro de datos
+                margin: [45, 10, 60, 80], // margenes del cuadro de datos
                 events: {
                     load: function() {
                         // set up the updating of the chart each second
                         var series = this.series[0];
                         setInterval(function() {
                             var x = (new Date()).getTime(), // current time
-                                y = Math.random()*1+24.3;
+                                hora1 = (new Date()).getHours(),
+                                pi1 = 3.14159,
+                                y = Math.random()*0.5+(-Math.cos((hora1)*pi1/12)*0.75)+24.3;
+                                //y = Math.random()*1+24.3;
                                 series.addPoint([x, y],true,true);                                
                         }, 300000); // es la velocidad de creacion de un nuevo punto
                         
@@ -46,13 +49,13 @@ $(function () {
                 },
                 minPadding: 0.2,
                 maxPadding: 0.2,
-                maxZoom: 30,
+                maxZoom: 3,
                 plotLines: [{
                     value: 0,
                     width: 5,
                     color: '#808080'
                 }],
-                min: 0,         // para establecer el valor minimo
+                //min: 0,         // para establecer el valor minimo
                 minorGridLineWidth: 0,
                 gridLineWidth: 0,
                 alternateGridColor: null, // para poder alternar el color en el eje Y
@@ -112,12 +115,15 @@ $(function () {
                     // generate an array of random data
                     var data = [],
                         time = (new Date()).getTime(),
+                        hora = (new Date()).getHours(),
+                        pi = 3.14159,
                         i;
     
-                    for (i = -60; i <= 0; i++) {   //para que paresca muestra de un dia, utilizar i= -288
+                    for (i = -144; i <= 0; i++) {   //para que paresca muestra de un dia, utilizar i= -288
                         data.push({
                             x: time + i * 300000,
-                            y: Math.random()*1+24.3
+                            y: Math.random()*0.5+(-Math.cos((hora+(i*24/288))*pi/12)*0.75)+24.3
+                            //y: -Math.cos((hora+(i*24/288))*pi/12)*2
                         });
                     }
                     return data;
@@ -129,6 +135,6 @@ $(function () {
 
 		</script>
 
-<div align="left" >
-<div id="contenedorTemperatura" style="height: 300px; width: 600px "></div>
+<div align="center" >
+<div id="contenedorTemperatura" style="height: 300px; width: 700px "></div>
 </div>
