@@ -102,6 +102,7 @@ function keepAlive() {	var myAjax = new Request({method: "get", url: "index.php"
 	
 	<div id="maincontent" class="maincontent noright">
 		<div class="inner clearfix">
+                
 					<div id="left" class="column column1">
 				<div class="inner clearfix">
 							<div class="moduletable">
@@ -149,7 +150,20 @@ function keepAlive() {	var myAjax = new Request({method: "get", url: "index.php"
 		</div>
 	
 				</div>
-			</div>
+                <div style="color:#1C7997;" >
+                    <font size=3 >
+                        <p><b>Contactanos:</b>
+                        <br>
+                        waposat.contactanos@gmail.com
+                        <br>
+                        <b>Telefono:</b>
+                        <br>
+                        944 271 772
+                        </p>
+                    </font>
+                </div>
+           </div>
+            
 						<div id="main" class="column main row-fluid">
 				<div class="inner clearfix">
 							<div id="center" class="column center ">
