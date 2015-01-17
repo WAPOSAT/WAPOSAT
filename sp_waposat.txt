@@ -1,0 +1,261 @@
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CargaDatos_CadenaFuente_Insertar_Sp`(IN cadena varchar(400)
+	)
+BEGIN
+	DECLARE id INT;
+	SET @FechaMedicion = sysdate(); #temporal hasta que el equipo envie la fecha
+############### Insertar la cadena ###############
+
+    INSERT INTO CadenaFuente(CadenaFuente,fechamedicion)
+	VALUES (cadena,@FechaMedicion);
+	COMMIT;
+
+############### Obtener el ultimo IdCadenaFuente Insertado ###############
+
+	SELECT LAST_INSERT_ID() INTO id;
+
+############### Llamar al SP Para Cargar la tabla temporal de carga ###############
+
+	CALL CargaDatos_CadenaFuente_Validar_Sp(id);
+END $$
+
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CargaDatos_CadenaFuente_Validar_Sp`(IN idUltimo INT)
+BEGIN
+
+	SET @maxLongCad = 409;
+
+############### Quitar espacion en blanco ###############
+
+	UPDATE CadenaFuente cf
+	SET cf.CadenaFuente = TRIM(cf.CadenaFuente)
+	WHERE IdCadenaFuente = idUltimo;
+
+############### Validar caracteres de la cadena (solo 0 y 1) ###############
+
+############### Validar longitud de la cadena ###############
+
+	UPDATE CadenaFuente cf
+	SET cf.TieneError = 1
+	WHERE LENGTH(cf.CadenaFuente) > @maxLongCad
+	AND IdCadenaFuente = idUltimo;
+
+############### Llenar campos calculados ###############
+
+    UPDATE CadenaFuente cf
+	SET cf.CodigoEquipo = conv(substring(cf.CadenaFuente,1,16),2,10)
+		#, cf.EstadoSensores = conv(substring(cf.CadenaFuente,17,24),2,10)
+		, cf.EstadoSensor_1 = conv(substring(cf.CadenaFuente,17,1),2,10)
+		, cf.CodigoSensor_1 = conv(substring(cf.CadenaFuente,25,16),2,10)
+		, cf.ValorSensor_1 = conv(substring(cf.CadenaFuente,41,32),2,10)
+		, cf.EstadoSensor_2 = conv(substring(cf.CadenaFuente,18,1),2,10)
+		, cf.CodigoSensor_2 = conv(substring(cf.CadenaFuente,73,16),2,10)
+		, cf.ValorSensor_2 = conv(substring(cf.CadenaFuente,89,32),2,10)
+		, cf.EstadoSensor_3 = conv(substring(cf.CadenaFuente,19,1),2,10)
+		, cf.CodigoSensor_3 = conv(substring(cf.CadenaFuente,121,16),2,10)
+		, cf.ValorSensor_3 = conv(substring(cf.CadenaFuente,137,32),2,10)
+		, cf.EstadoSensor_4 = conv(substring(cf.CadenaFuente,20,1),2,10)
+		, cf.CodigoSensor_4 = conv(substring(cf.CadenaFuente,169,16),2,10)
+		, cf.ValorSensor_4 = conv(substring(cf.CadenaFuente,185,32),2,10)
+	WHERE cf.IdCadenaFuente = idUltimo AND cf.TieneError = 0;
+
+############### Cargar Tabla Temporal CargaDatos_medicion ###############
+#1
+if (select EstadoSensor_1 from CadenaFuente where IdCadenaFuente = idUltimo AND TieneError = 0) = 1 then
+	Insert Into Cargadatos_medicion
+				(
+				IdCadenaFuente
+				, Codigo_Equipo
+				, FechaMedicion
+				, Codigo_Sensor
+				, Valor_Medicion
+				#, Exponente_Medicion
+				)
+	Select 		idUltimo
+				, cf.CodigoEquipo
+				, cf.FechaMedicion
+				, cf.CodigoSensor_1
+				, ValorMedicion_Calcular_fn(0,cf.ValorSensor_1)
+	From CadenaFuente cf Where cf.IdCadenaFuente = idUltimo and EstadoSensor_1 = 1;
+	commit;
+end if;
+#2
+if (select EstadoSensor_2 from CadenaFuente where IdCadenaFuente = idUltimo AND TieneError = 0) = 1 then
+	Insert Into Cargadatos_medicion
+				(
+				IdCadenaFuente
+				, Codigo_Equipo
+				, FechaMedicion
+				, Codigo_Sensor
+				, Valor_Medicion
+				#, Exponente_Medicion
+				)
+	Select 		idUltimo
+				, cf.CodigoEquipo
+				, cf.FechaMedicion
+				, cf.CodigoSensor_2
+				, ValorMedicion_Calcular_fn(0,cf.ValorSensor_2)
+	From CadenaFuente cf Where cf.IdCadenaFuente = idUltimo and EstadoSensor_2 = 1;
+	commit;
+end if;
+#3
+if (select EstadoSensor_3 from CadenaFuente where IdCadenaFuente = idUltimo AND TieneError = 0) = 1 then
+	Insert Into Cargadatos_medicion
+				(
+				IdCadenaFuente
+				, Codigo_Equipo
+				, FechaMedicion
+				, Codigo_Sensor
+				, Valor_Medicion
+				#, Exponente_Medicion
+				)
+	Select 		idUltimo
+				, cf.CodigoEquipo
+				, cf.FechaMedicion
+				, cf.CodigoSensor_3
+				, ValorMedicion_Calcular_fn(0,cf.ValorSensor_3)
+	From CadenaFuente cf Where cf.IdCadenaFuente = idUltimo and EstadoSensor_3 = 1;
+	commit;
+end if;
+#4
+if (select EstadoSensor_4 from CadenaFuente where IdCadenaFuente = idUltimo AND TieneError = 0) = 1 then
+	Insert Into Cargadatos_medicion
+				(
+				IdCadenaFuente
+				, Codigo_Equipo
+				, FechaMedicion
+				, Codigo_Sensor
+				, Valor_Medicion
+				#, Exponente_Medicion
+				)
+	Select 		idUltimo
+				, cf.CodigoEquipo
+				, cf.FechaMedicion
+				, cf.CodigoSensor_4
+				, ValorMedicion_Calcular_fn(0,cf.ValorSensor_4)
+	From CadenaFuente cf Where cf.IdCadenaFuente = idUltimo and EstadoSensor_4 = 1;
+	Commit;
+end if;
+
+
+	CALL CargaDatos_medicion_insertar_Sp(IdUltimo);
+END
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CargaDatos_Medicion_Insertar_Sp`(in idUltimo int)
+BEGIN
+	declare idUltimoMedicion int;
+	select @v_User = user();
+	select @v_FechaCreacion = sysdate();
+	### Actualizar Campos necesarios para la insercion Maching ###
+	/*update cargadatos_medicion cdm
+	set cdm.IdEquipo = (select IdEquipo from equipo e where e.codigo_equipo = cdm.codigoequipo)
+		, cdm.IdComponente = (select IdComponente from compoente c where c.Codigo_Componente = cdm.CodigoComponente)
+	where cdm.IdCadenaFuente = idUltimo;*/
+
+	update cargadatos_medicion cdm
+		left join Equipo_DireccionGeografica e_dg on e_dg.codigo_equipo = cdm.Codigo_equipo
+	set cdm.IdEquipo = e_dg.IdEquipo
+		, cdm.IdDireccionGeografica = e_dg.IdDireccionGeografica
+		, cdm.IdRecursoHidrico = (select b.IdRecursoHidrico from Equipo_DireccionGeografica a
+									join DireccionGeografica b on a.IdDireccionGeografica = b.IdDireccionGeografica
+									where a.Codigo_equipo = cdm.Codigo_equipo)
+	where cdm.IdCadenaFuente = idUltimo;
+	commit;
+########## Validar la existencia de las llaves foraneas ##########
+
+########## Insertar en el maestro de Medicion (Cabecera) ##########
+
+	insert into medicion
+				(
+				IdEquipo,
+				IdDireccionGeografica,
+				IdRecursoHidrico,
+				IdCliente,
+				FechaMedicion,
+				TiempoMedicion,
+				FechaRecepcion_Medicion
+				, Activo
+				, FechaCreacion
+				, UsuarioCreacion
+				)
+		select cdm.IdEquipo
+				, cdm.IdDireccionGeografica
+				, cdm.IdRecursoHidrico
+				, null
+				, cdm.fechamedicion
+				, time(cdm.fechaMedicion)
+				, cdm.fechamedicion
+				, 1
+				, @v_FechaCreacion
+				, @v_User
+		 from cargaDatos_medicion cdm
+		 where cdm.IdCadenaFuente = idUltimo
+		 group by cdm.IdEquipo
+				, cdm.IdDireccionGeografica
+				, cdm.IdRecursoHidrico
+				, null
+				, cdm.fechamedicion
+				, time(cdm.fechaMedicion)
+				, cdm.fechamedicion
+				, 1
+				, @v_FechaCreacion
+				, @v_User;
+
+		select last_insert_id() into idUltimoMedicion;
+		commit;
+########## Traer llaves de Medicion (Detalle) ##########
+
+	update cargadatos_medicion cdm
+		left join Componente_ParametroMedicion c_pm on c_pm.codigo_componente = cdm.Codigo_Sensor
+	set cdm.IdMedicion = idUltimoMedicion
+		, cdm.IdComponente = c_pm.IdComponente
+		, cdm.IdParametroMedicion = c_pm.IdParametroMedicion
+		, cdm.IdUnidadMedida = c_pm.IdUnidadMedida
+	where cdm.IdCadenaFuente = idUltimo;
+	commit;
+########## Insetar datos de Medicion (Detalle) ##########
+
+	insert into MedicionDetalle
+				(
+				IdMedicion,
+				IdComponente,
+				IdParametroMedicion,
+				IdUnidadMedida,
+				Valor_Medicion,
+				Exponente_Medicion
+				, Activo
+				, FechaCreacion
+				, UsuarioCreacion
+				)
+		select cdm.IdMedicion
+				, cdm.IdComponente
+				, cdm.IdParametroMedicion
+				, cdm.IdUnidadMedida
+				, cdm.Valor_Medicion
+				, cdm.Exponente_Medicion
+				, 1
+				, @v_FechaCreacion
+				, @v_User
+		 from cargaDatos_medicion cdm
+		 where cdm.IdCadenaFuente = idUltimo; #and tieneerror = 0;
+		 commit;
+END
