@@ -1,3 +1,7 @@
+//**************************************
+// PROGRAMA DEL ARDUINO ESCLAVO V4.0
+//**************************************
+
 // Motores
 const int Pin_MV1 = 7;  // Pin del Motor Vertical
 const int Pin_MV2 = 6;  // Pin del Motor Vertical
@@ -23,6 +27,11 @@ const int T = 5000;  // Tiempo de estabilizacion de los sensores
 const int valvula = 11;
 const int bomba = 13;
 
+//Comunicacion Master Slave
+const int PinM2S = 2;
+const int PinS2M = 3;
+const int Estate_M2S;
+
 void setup()
 {
   // Configuracion de los motores
@@ -41,11 +50,21 @@ void setup()
   pinMode(valvula,OUTPUT);
   pinMode(bomba,OUTPUT);
   
+  // Comunicacion
+  pinMode(PinM2S, INPUT);
+  pinMode(PinS2M, OUTPUT);
+  digitalWrite(PinS2M,LOW);
+  
   Serial.begin(9600);
 }
 
+// ***********************************
+// PROGRAMA
+// ***********************************
+
 void loop()
 {
+  // Secuencia para identificar la posicion del sistema
   Leer_Topes();
   Parar_Motor_Hor();
   Parar_Motor_Ver();
@@ -73,7 +92,9 @@ void loop()
     if (Estate_T1 == HIGH && Estate_T2 == LOW)  // Si esta pegado a la derecha (posicion inicial)
     {
       Bajar_Base();
-      delay(Ts);  // Sensores sumergidos un tiempo Ts
+      EnviarMaster_SensorGuardado();  // Indica al Arduino Maestro que el sensor esta en posicion inicial
+      EsperarMaster_ColocarSensor();  // Esperando a que el Arduino Maestro pida la lectura
+      //delay(Ts);  // Sensores sumergidos un tiempo Ts
       Subir_Base();
     }
     // Mueve a la izquierda hasta cambiar de estado en T1 y T2
@@ -93,7 +114,8 @@ void loop()
         delay(24000);      // Llenado del tanque
         apagar_valvula();
         delay(T);         // Estabilizar los sensores
-        // Avisar al otro Arduino que debe tomar el valor de los sensores
+        EnviarMaster_SensorListo(); // Avisar al Arduino Maestro que debe tomar el valor de los sensores
+        EsperarMaster_GuardarSensor();  // Espera a que el Arduino Maestro pida el guardado de sensores
         apagar_bomba();
         prender_valvula();
         delay(40000);     // Vaceado del tanque
@@ -237,4 +259,34 @@ void apagar_valvula()
 {
   digitalWrite(valvula,LOW);
   Serial.println("APAGA LA VALVULA");
+}
+
+void EsperarMaster_ColocarSensor()
+{
+  Estate_M2S = digitalRead(PinM2S);  // Lectura Esperando permiso del Master
+  while(Estate_M2S == LOW)
+  {
+    delay(30000);
+    Estate_M2S = digitalRead(PinM2S);  // Lectura Esperando permiso del Master    
+  }
+}
+
+void EsperarMaster_GuardarSensor()
+{
+  Estate_M2S = digitalRead(PinM2S);  // Lectura Esperando permiso del Master
+  while(Estate_M2S == HIGH)
+  {
+    delay(1000);
+    Estate_M2S = digitalRead(PinM2S);  // Lectura Esperando permiso del Master    
+  }
+}
+
+void EnviarMaster_SensorListo()
+{
+  digitalWrite(PinS2M,HIGH);
+}
+
+void EnviarMaster_SensorGuardado()
+{
+  digitalWrite(PinS2M,LOW);
 }
