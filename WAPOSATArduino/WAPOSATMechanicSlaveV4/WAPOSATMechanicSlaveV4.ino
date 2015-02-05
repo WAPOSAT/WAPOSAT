@@ -30,7 +30,7 @@ const int bomba = 13;
 //Comunicacion Master Slave
 const int PinM2S = 2;
 const int PinS2M = 3;
-const int Estate_M2S;
+int Estate_M2S;
 
 void setup()
 {

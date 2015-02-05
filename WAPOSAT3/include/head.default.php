@@ -9,7 +9,7 @@
 <link href="../css/bootstrap.css" rel="stylesheet">
 
 <!-- Custom CSS -->
-<link href="../css/stylish-portfolio.css" rel="stylesheet">
+<link href="../css/style.general.css" rel="stylesheet">
 
 <!-- Custom Fonts -->
 <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -20,6 +20,8 @@
 <!-- Bootstrap Core JavaScript -->
 <script src="../js/bootstrap.min.js"></script>
 
+<!-- JS Scripts general -->
+<script src="../js/scroll.animation.general.js"></script>
 
 <!-- <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css"> -->
 
