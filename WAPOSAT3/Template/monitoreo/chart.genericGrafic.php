@@ -1,3 +1,8 @@
+<?php
+$id_equipo = 1;
+$id_parametro = 
+?>
+
 <script>
 var EstPH = 0,
     EstTemp = 0;
@@ -47,17 +52,18 @@ function GetNewDataTime (id_equipo, id_parametro){
     });
 }
 
-function CargarData (MPoint, superior, inferior, tiempoAntes, Periodo) {
+function CargarData (id_equipo, id_parametro, superior, inferior, tiempoAntes, Periodo) {
     var Lim_sup = superior,
         Lim_inf = inferior,
         TimeBefore = tiempoAntes,     //horas
         Tmuestreo = Periodo,   //segundos
         PuntoMedio = MPoint;
+    GetNewDataTime (id_equipo, id_parametro);
     var data = {
         labels: labelDataTime,
         datasets: [
             {
-                label: "PH",
+                label: "Parametro",
                 fillColor : "rgba(220,220,0,0)",       //Fondo
                 strokeColor : "rgba(220,220,0,1)",     //Linea
                 pointColor : "rgba(220,220,0,1)",      //Punto
@@ -118,34 +124,23 @@ function CargarData (MPoint, superior, inferior, tiempoAntes, Periodo) {
 }
 
 
-function animar_grafica (Linea, MPoint, Lim_sup, Lim_inf, frecuencia ,parametro){
+function animar_grafica (Linea, id_equipo, id_parametro, Lim_sup, Lim_inf, frecuencia ,parametro){
     if (parametro == 1 && EstPH == 0 ){
         EstPH = 1;
         EstTemp = 0;
-        nuevo_dato (Linea, MPoint, Lim_sup, Lim_inf, frecuencia ,parametro);
+        nuevo_dato (Linea, id_equipo, id_parametro, Lim_sup, Lim_inf, frecuencia ,parametro);
     }
     
     if (parametro == 2 && EstTemp == 0){
         EstPH = 0;
         EstTemp = 1;
-        nuevo_dato (Linea, MPoint, Lim_sup, Lim_inf, frecuencia ,parametro);
+        nuevo_dato (Linea, id_equipo, id_parametro, Lim_sup, Lim_inf, frecuencia ,parametro);
     }
 }
 
 
-function nuevo_dato (Linea, MPoint, Lim_sup, Lim_inf, frecuencia ,parametro){
-            
-        var a = new Date(),
-            hour = a.getHours(),
-            min = a.getMinutes(),
-            //sec = a.getSeconds(),
-            //time = hour + ':' + min+ ':'+ sec ,
-            time = hour + ':' + min,
-            bucle = 1,
-            pi = 3.14159,
-        y = Math.random()*0.25+(-Math.cos((hour)*pi/12)*0.4)+ MPoint;
-        y = (Math.floor(y*100))/100;
-    
+function nuevo_dato (Linea, id_equipo, id_parametro, Lim_sup, Lim_inf, frecuencia ,parametro){
+
     if (parametro == 1){
         if (EstPH == 0) {bucle = 0;}
     }
