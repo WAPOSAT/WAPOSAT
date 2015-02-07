@@ -18,19 +18,23 @@ $NameEstation = "Estacion CITRAR-UNI"
   
   $(function(){
         $("#MPH").click(function(){
-            var data = CargarData (7, 14, 0, 2, 5000);
+            var data = CargarData (1, 1, 14, 0, 2, 5000);
+            //var data = CargarData (7, 14, 0, 2, 5000);
         var ctx = document.getElementById("myChart").getContext("2d");
         var MyLine = new Chart(ctx).Line(data, {animation: true, responsive: true});
-        animar_grafica (MyLine, 7, 14, 0, 5000, 1);
+        //animar_grafica (MyLine, 1, 1, 14, 0, 5000, 1);
+        //animar_grafica (MyLine, 7, 14, 0, 5000, 1);
         });
     });
 
     $(function(){
         $("#MTemp").click(function(){
-            var data = CargarData (24, 35, 0, 2, 5000);
+            var data = CargarData (1, 1, 35, 0, 2, 5000);
+            //var data = CargarData (24, 35, 0, 2, 5000);
         var ctx = document.getElementById("myChart").getContext("2d");
         var MyLine = new Chart(ctx).Line(data, {animation: true, responsive: true});
-        animar_grafica (MyLine, 24, 35, 0, 5000, 2);
+        //animar_grafica (MyLine, 1, 1, 35, 0, 5000, 2);
+        //animar_grafica (MyLine,24, 35, 0, 5000, 2);
         });
     });
   

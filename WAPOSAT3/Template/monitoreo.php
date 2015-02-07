@@ -15,7 +15,8 @@
     <?php  include_once("monitoreo/maps.scriptJS.php"); ?>
     <script src="../js/Chart.js"></script>
     <script src="monitoreo/monitoreo.js"></script>
-    <script src="monitoreo/GenericChart.js"></script>
+    <!-- <script src="monitoreo/GenericChart.js"></script> -->
+    <?php  include_once("monitoreo/chart.genericGrafic.php"); ?>
     
     
     
