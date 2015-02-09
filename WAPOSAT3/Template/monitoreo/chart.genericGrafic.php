@@ -8,12 +8,17 @@ var EstPH = 0,
     EstTemp = 0;
 
 var ArrayDataTime = {},
-    longDataTime = 0;
-var ArrayNewDataTime = {},
-    NewData = 0;
-    
+   //labelsDataTime = [],
+    labelsDataTime = ["January", "February", "March", "April", "May", "June", "July"];
+    //DatasetDataTime = [],
+    DatasetDataTime = [65, 59, 80, 81, 56, 55, 40],
+    longDataTime = 7;
 
-function GetDataTime (id_equipo, id_parametro){
+function GenerateChart (id_equipo, id_parametro, periodo, IdChart, parametro){
+    var ArrayDataTime = {},
+        ChartData = {};
+    
+    // Programa Ajax para pedir DataTime
     $parametros = {
             'boton-obtener-data-tiempo' : true,
             'id_equipo' : id_equipo,
@@ -28,38 +33,39 @@ function GetDataTime (id_equipo, id_parametro){
         dataType : "json",
         success: function(data){
             ArrayDataTime = data;
-            longDataTime = ArrayDataTime.long;
+            var LimSup = ArrayDataTime.LimSup,
+                LimInf = ArrayDataTime.LimInf;
+            ChartData = CargarData (ArrayDataTime.DataTime,  ArrayDataTime.DataValue, LimSup, LimInf);
+            var ctx = document.getElementById(IdChart).getContext("2d");
+            var MyLine = new Chart(ctx).Line(ChartData, {animation: true, responsive: true});
+            GenerateAnimationChart (MyLine, id_equipo, id_parametro, LimSup, LimInf, periodo, parametro);      
         }
     });
-}
+}    
 
-function GetNewDataTime (id_equipo, id_parametro){
-    $parametros = {
-        'boton-obtener-new-data-time' : true,
-        'id_equipo' : id_equipo,
-        'id_parametros' : id_parametro
-    };
-    $url = "monitoreo/chart.NewDataTime.php";
-    $.ajax({
-        type: "POST",
-        url: $url,
-        data: $parametros,
-        dataType : "json",
-        success: function(data){
-            ArrayNewDataTime = data;
-            NewData =1;
-        }
-    });
+
+function GenerateAnimationChart (Linea, id_equipo, id_parametro, superior, inferior, periodo, parametro){
+    if (parametro == 1 && EstPH == 0 ){
+        EstPH = 1;
+        EstTemp = 0;
+        nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo ,parametro);
+    }
+    
+    if (parametro == 2 && EstTemp == 0){
+        EstPH = 0;
+        EstTemp = 1;
+        nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo, parametro);
+    }
+    
 }
     
-function CargarData (id_equipo, id_parametro, superior, inferior, tiempoAntes, Periodo) {
-    var Lim_sup = superior,
-        Lim_inf = inferior,
-        TimeBefore = tiempoAntes,     //horas
-        Tmuestreo = Periodo;   //milisegundos
-    GetDataTime (id_equipo, id_parametro);
+function CargarData (labelsDataTime, DatasetDataTime, superior, inferior) {
+    var LimSup = superior,
+        LimInf = inferior,
+        longDataTime = labelsDataTime.length;
+    
     var data = {
-        labels: ArrayDataTime.DataTime,
+        labels: labelsDataTime,
         datasets: [
             {
                 label: "Parametro",
@@ -69,7 +75,7 @@ function CargarData (id_equipo, id_parametro, superior, inferior, tiempoAntes, P
                 pointStrokeColor : "#fff",
                 pointHighlightFill : "#fff",
                 pointHighlightStroke : "rgba(220,220,220,1)",
-                data: ArrayDataTime.DataValue
+                data: DatasetDataTime
             },
             {
                 label: "Limite Superior",
@@ -82,7 +88,7 @@ function CargarData (id_equipo, id_parametro, superior, inferior, tiempoAntes, P
                 data: (function() {
                         var data = [];
                         for (var i = 0; i < longDataTime; i++) {
-                            data.push( Lim_sup );
+                            data.push( LimSup );
                         }
                         return data;
                     })()
@@ -98,59 +104,60 @@ function CargarData (id_equipo, id_parametro, superior, inferior, tiempoAntes, P
                 data: (function() {
                         var data = [];
                         for (var i = 0; i < longDataTime; i++) {
-                            data.push( Lim_inf );
+                            data.push( LimInf );
                         }
                         return data;
                     })()
             }
         ]
     };
-    
-    ArrayDataTime = {};
-    longDataTime = 0;
     return data;
 }
 
-
-function animar_grafica (Linea, id_equipo, id_parametro, Lim_sup, Lim_inf, frecuencia ,parametro){
-    if (parametro == 1 && EstPH == 0 ){
-        EstPH = 1;
-        EstTemp = 0;
-        nuevo_dato (Linea, id_equipo, id_parametro, Lim_sup, Lim_inf, frecuencia ,parametro);
-    }
+function nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo ,parametro){
+    var bucle = 1,
+        ArrayNew = {},
+        ArrayNewDataTime = [],
+        ArrayNewValues = [],
+        LongArrayNew = 0,
+        LimSup = superior,
+        LimInf = inferior;
     
-    if (parametro == 2 && EstTemp == 0){
-        EstPH = 0;
-        EstTemp = 1;
-        nuevo_dato (Linea, id_equipo, id_parametro, Lim_sup, Lim_inf, frecuencia ,parametro);
-    }
-}
-
-
-function nuevo_dato (Linea, id_equipo, id_parametro, Lim_sup, Lim_inf, frecuencia ,parametro){
-    var bucle = 1;
     if (parametro == 1){
         if (EstPH == 0) {bucle = 0;}
     }
-    
     if (parametro == 2){
         if (EstTemp == 0) {bucle = 0;}
     }
-    GetNewDataTime (id_equipo, id_parametro);
-    if (bucle == 1 && NewData == 1){
-        NewData = 0;
-        var NumData = ArrayNewDataTime.long,
-            y = 0,
-            time = "";
+    if (bucle == 1){
         
-        for (var i=0; i<NumData; i++){
-            y = ArrayNewDataTime[i][0];
-            time = ArrayNewDataTime[i][1];
-            Linea.addData([ y, Lim_sup, Lim_inf] ,time);
-            Linea.removeData();
-        }
-        setTimeout(function(){ nuevo_dato (Linea, id_equipo, id_parametro, Lim_sup, Lim_inf, frecuencia ,parametro);}, frecuencia);
-    
+        $parametros = {
+            'boton-obtener-new-data-time' : true,
+            'id_equipo' : id_equipo,
+            'id_parametros' : id_parametro,
+            'lastID' : 15
+        };
+        $url = "monitoreo/chart.NewDataTime.php";
+        $.ajax({
+            type: "POST",
+            url: $url,
+            data: $parametros,
+            dataType : "json",
+            success: function(data){
+                ArrayNew = data;
+                ArrayNewDataTime = ArrayNew.DataTime;
+                ArrayNewValues = ArrayNew.DataValue;
+                LongArrayNew = ArrayNew.long;
+                var y,x;
+                for (var i=0; i<LongArrayNew; i++){
+                    y = ArrayNewValues[i];
+                    x = ArrayNewDataTime[i];
+                    Linea.addData([ y, LimSup, LimInf] ,x);
+                    Linea.removeData();
+                }
+                setTimeout(function(){ nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo, parametro);}, periodo);
+            }
+        });
     }
 }  
     alert("fin");
