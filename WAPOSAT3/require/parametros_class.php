@@ -1,5 +1,5 @@
 <?php
-require_once ("../require/conexion_class.php");
+//require_once ("../../require/conexion_class.php");
 
 class parametros {
     private $_conexion;

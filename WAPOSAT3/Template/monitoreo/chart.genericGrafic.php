@@ -34,27 +34,30 @@ function GenerateChart (id_equipo, id_parametro, periodo, IdChart, parametro){
         success: function(data){
             ArrayDataTime = data;
             var LimSup = ArrayDataTime.LimSup,
-                LimInf = ArrayDataTime.LimInf;
+                LimInf = ArrayDataTime.LimInf,
+                lastID = ArrayDataTime.lastID;
+            
             ChartData = CargarData (ArrayDataTime.DataTime,  ArrayDataTime.DataValue, LimSup, LimInf);
             var ctx = document.getElementById(IdChart).getContext("2d");
             var MyLine = new Chart(ctx).Line(ChartData, {animation: true, responsive: true});
-            GenerateAnimationChart (MyLine, id_equipo, id_parametro, LimSup, LimInf, periodo, parametro);      
+            GenerateAnimationChart (MyLine, id_equipo, id_parametro, LimSup, LimInf, periodo, lastID, parametro);      
         }
     });
 }    
 
 
-function GenerateAnimationChart (Linea, id_equipo, id_parametro, superior, inferior, periodo, parametro){
+function GenerateAnimationChart (Linea, id_equipo, id_parametro, superior, inferior, periodo, lastID, parametro){
+    
     if (parametro == 1 && EstPH == 0 ){
         EstPH = 1;
         EstTemp = 0;
-        nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo ,parametro);
+        nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo, lastID ,parametro);
     }
     
     if (parametro == 2 && EstTemp == 0){
         EstPH = 0;
         EstTemp = 1;
-        nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo, parametro);
+        nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo, lastID, parametro);
     }
     
 }
@@ -114,14 +117,16 @@ function CargarData (labelsDataTime, DatasetDataTime, superior, inferior) {
     return data;
 }
 
-function nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo ,parametro){
+function nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo , lastID, parametro){
     var bucle = 1,
         ArrayNew = {},
         ArrayNewDataTime = [],
         ArrayNewValues = [],
         LongArrayNew = 0,
+        id_monitoreo = lastID,
         LimSup = superior,
         LimInf = inferior;
+    //alert(id_monitoreo);
     
     if (parametro == 1){
         if (EstPH == 0) {bucle = 0;}
@@ -134,8 +139,8 @@ function nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo
         $parametros = {
             'boton-obtener-new-data-time' : true,
             'id_equipo' : id_equipo,
-            'id_parametros' : id_parametro,
-            'lastID' : 15
+            'id_parametro' : id_parametro,
+            'lastID' : id_monitoreo
         };
         $url = "monitoreo/chart.NewDataTime.php";
         $.ajax({
@@ -148,17 +153,20 @@ function nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo
                 ArrayNewDataTime = ArrayNew.DataTime;
                 ArrayNewValues = ArrayNew.DataValue;
                 LongArrayNew = ArrayNew.long;
-                var y,x;
-                for (var i=0; i<LongArrayNew; i++){
-                    y = ArrayNewValues[i];
-                    x = ArrayNewDataTime[i];
-                    Linea.addData([ y, LimSup, LimInf] ,x);
-                    Linea.removeData();
+                if(LongArrayNew != 0 ){
+                    id_monitoreo = ArrayNew.lastID;
+                    var y,x;
+                    for (var i=0; i<LongArrayNew; i++){
+                        y = ArrayNewValues[i];
+                        x = ArrayNewDataTime[i];
+                        Linea.addData([ y, LimSup, LimInf] ,x);
+                        Linea.removeData();
+                    }
                 }
-                setTimeout(function(){ nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo, parametro);}, periodo);
+                setTimeout(function(){ nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo, id_monitoreo, parametro);}, periodo);
             }
         });
     }
 }  
-    alert("fin");
+
 </script>

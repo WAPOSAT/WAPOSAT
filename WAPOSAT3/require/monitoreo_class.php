@@ -1,5 +1,5 @@
 <?php
-require_once ("../require/conexion_class.php");
+//require_once ("../require/conexion_class.php");
 
 class monitoreo {
     private $_conexion;
@@ -15,6 +15,11 @@ class monitoreo {
     
     public function mostrar_valores ($id_sensor, $id_equipo, $size) {
         $sql = "SELECT * FROM monitoreo WHERE id_sensor='".$id_sensor."' AND id_equipo='".$id_equipo."' ORDER BY id_monitoreo DESC LIMIT 0 , ".$size." ";
+        $this->_conexion->ejecutar_sentencia($sql);
+    }
+    
+    public function mostrar_NewValues($id_sensor, $id_equipo, $lastID){
+        $sql = "SELECT * FROM monitoreo WHERE id_sensor='".$id_sensor."' AND id_equipo='".$id_equipo."' AND id_monitoreo>".$lastID." ORDER BY id_monitoreo DESC";
         $this->_conexion->ejecutar_sentencia($sql);
     }
     

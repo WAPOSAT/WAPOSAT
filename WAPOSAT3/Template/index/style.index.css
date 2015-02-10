@@ -28,6 +28,11 @@
     font-weight: 700;
 }
 
+.text-vertical-center a {
+    text-decoration: none;
+    color: #fff;
+}
+
 /* Custom Button Styles */
 
 .btn-dark {

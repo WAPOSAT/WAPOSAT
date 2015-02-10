@@ -28,13 +28,14 @@
             <a href="#about" class="btn btn-dark btn-lg">Descubre m&aacute;s</a>
         </div>
     </header>
+
     <!-- About -->
     <section id="about" class="about">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2>Informaci&oacute;n oportuna para una mejor toma de decisiones</h2>
-                    <p class="lead">Revisa nuestra plataforma de prueba <a target="_blank" href="mapas.php">Estacion CITRAR-UNI</a>.</p>
+                    <p class="lead">Revisa nuestra plataforma de prueba <a  href="monitoreo.php">Estaci&oacute;n CITRAR-UNI</a>.</p>
                 </div>
             </div>
             <!-- /.row -->
@@ -68,7 +69,7 @@
                                 <span class="fa-stack fa-4x">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-bar-chart fa-stack-1x text-primary"></i>
-                            </span>
+                                </span>
                                 <h4>
                                     <strong>Informaci&oacute;n en tiempo real</strong>
                                 </h4>
@@ -102,7 +103,7 @@
     <!-- Callout -->
     <aside class="callout">
         <div class="text-vertical-center">
-            <h1>Nuestro sistema autom&aacute;tico</h1>
+            <h1>Nuestro sistema autom&aacute;tico<br><small><a class="btn-dark" href="Waposat_detalleTecnico.pdf">Ver mas</a></small></h1>
         </div>
     </aside>
 
@@ -128,7 +129,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2>Acerca de Nosotros</h2>
-                    <p class="lead">Waposat es una empresa que innova y desarrolla productos tecnol&oacute;gicos para el monitoreo del agua.<br>Mediante los productos y servicios que brindamos tenemos como objetivo de que todas las instituciones, empresas y personas puedan acceder, de manera sencilla, al uso de la tecnolog&iacute;a para que puedan tener un mejor control y uso del agua en todas las actividades que realizan.</p>
+                    <p class="lead">Waposat es una empresa que innova y desarrolla productos tecnol&oacute;gicos para el monitoreo del agua, mediante los productos y servicios que brindamos.<br> Tenemos como objetivo que todas las instituciones, empresas y personas accedan de manera sencilla al uso de la tecnolog&iacute;a para que puedan tener un mejor control y uso del agua en todas las actividades que realizan.</p>
                 </div>
             </div>
             <!-- /.row -->
