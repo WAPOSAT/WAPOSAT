@@ -20,7 +20,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="EstamosTrabajando.php">E1-RioRimac</a></li>
                         <li class="divider"></li>
-                        <li><a href="mapas.php">E1-CITRAR_UNI</a></li>
+                        <li><a href="monitoreo.php">E1-CITRAR_UNI</a></li>
                     </ul>
                 </li>
             </ul>
