@@ -10,7 +10,7 @@ $lastID = 0;
 $long = 0;
 $LimSup = 0;
 $LimInf = 0;
-$size = 15;
+$size = 40;
 
 $parametros = new parametros();
 $monitoreo = new monitoreo();

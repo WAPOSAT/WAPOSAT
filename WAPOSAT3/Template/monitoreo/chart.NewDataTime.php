@@ -21,7 +21,9 @@ $id_monitoreo = $_POST["lastID"];
 $monitoreo->mostrar_NewValues($id_parametro, $id_equipo, $id_monitoreo);
 
 while($valores = $monitoreo->retornar_SELECT()){
-    array_push($DataTime, $valores["fecha"]);
+    $fechaModificada = substr($valores["fecha"], 8);
+    $fechaModificada = "Dia: ".$fechaModificada;
+    array_push($DataTime, $fechaModificada);
     array_push($DataValue, $valores["valor"]);
     if($lastID < $valores["id_monitoreo"]){
         $lastID = $valores["id_monitoreo"];

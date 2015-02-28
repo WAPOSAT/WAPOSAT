@@ -1,7 +1,7 @@
 <?php
 $id_equipo = 1;
 $id_cliente = 1;
-$NameEstation = "Estacion de PRUEBA"
+$NameEstation = "Estaci&oacute;n de PRUEBA";
 ?>
 
 <script>
@@ -24,7 +24,7 @@ $NameEstation = "Estacion de PRUEBA"
 
     $(function(){
         $("#MTemp").click(function(){
-            GenerateChart (2, 2, 5000, "myChart", 2);
+            GenerateChart (2, 2, 5000, "myChart", 2, "#LastData");
         });
     });
   
@@ -32,11 +32,13 @@ $NameEstation = "Estacion de PRUEBA"
         $('#myTab a:last').tab('show')
     })*/
   PutDate();
+    
 </script>
 
 <div class="col-md-12">
     <blockquote>
         <h2><?php echo $NameEstation; ?><small id="fecha"></small></h2>
+        <div id="LastData"> </div>
     </blockquote>
 </div>
 
@@ -51,7 +53,7 @@ $NameEstation = "Estacion de PRUEBA"
   <div role="tabpanel" class="tab-pane col-md-12" id="Temperatura">temperatura <br> <canvas id="ChartTemp"></canvas></div>
 </div>
 -->
-<div class="col-md-12">
+<div class="col-md-10 col-md-offset-1">
     <canvas id="myChart"></canvas>
 </div>
 

@@ -14,7 +14,7 @@ var ArrayDataTime = {},
     DatasetDataTime = [65, 59, 80, 81, 56, 55, 40],
     longDataTime = 7;
 
-function GenerateChart (id_equipo, id_parametro, periodo, IdChart, parametro,IdLastData){
+function GenerateChart (id_equipo, id_parametro, periodo, IdChart, parametro){
     var ArrayDataTime = {},
         ChartData = {};
     
@@ -38,8 +38,7 @@ function GenerateChart (id_equipo, id_parametro, periodo, IdChart, parametro,IdL
                 lastID = ArrayDataTime.lastID;
             
             ChartData = CargarData (ArrayDataTime.DataTime,  ArrayDataTime.DataValue, LimSup, LimInf);
-            //$("#LastData").html(ArrayDataTime.DataValue[ArrayDataTime.long-1]);
-            //$("#LastData").html("holassss");
+            $("#LastData").html("&Uacute;ltimo Valor: "+ArrayDataTime.DataValue[ArrayDataTime.long-1]);
             var ctx = document.getElementById(IdChart).getContext("2d");
             var MyLine = new Chart(ctx).Line(ChartData, {animation: true, responsive: true});
             GenerateAnimationChart (MyLine, id_equipo, id_parametro, LimSup, LimInf, periodo, lastID, parametro);      
@@ -164,7 +163,7 @@ function nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo
                         Linea.addData([ y, LimSup, LimInf] ,x);
                         Linea.removeData();
                     }
-                    //$("#LastData").html(ArrayNewValues[LongArrayNew-1]);
+                    $("#LastData").html("&Uacute;ltimo valor: "+ArrayNewValues[LongArrayNew-1]);
                 }
                 setTimeout(function(){ nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo, id_monitoreo, parametro);}, periodo);
             }

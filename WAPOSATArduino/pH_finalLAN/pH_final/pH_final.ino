@@ -59,7 +59,7 @@ void loop()
   Serial.println("Conectando..");
 
   if (client.connect(server,80)>0) {  // Se conecta al servidor
-    client.print("GET /WAPOSAT3/Template/InsertData.php?sensor=1&equipo=1&valor="); // Envia los datos utilizando GET
+    client.print("GET /WAPOSAT3/Template/InsertData.php?sensor=1&equipo=2&valor="); // Envia los datos utilizando GET
     client.print(sensordata);
     client.println(" HTTP/1.0");
     client.println("User-Agent: Arduino 1.0");
