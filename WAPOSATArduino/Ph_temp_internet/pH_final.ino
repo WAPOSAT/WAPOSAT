@@ -38,15 +38,20 @@ float TempC=0.0;   // [ºC]       temperatura de salida en Celsius
 //---------------------------datos de sensor----------------------------------------------------------
 char sensordata[30];  //A 30 byte character array to hold incoming data from the sensors
 byte sensor_bytes_received=0;       //We need to know how many characters bytes have been received
-//----------------------------shell ethernet----------------------------------------------------------
-byte mac[] = {  0x90, 0xA2, 0xDA, 0x0E, 0x08, 0x82 }; // MAC de la tarjeta ethernet shield
-byte ip[] = { 192,168,1,250 }; // Direccion ip local
-byte server[] = { 192,168,1,1}; // Direccion ip del servidor
+
+//----------------------------configuracion shell ethernet----------------------------------------------------------
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+byte ip[] = { 172, 16, 13, 177 };
+byte gateway[] = { 172, 16, 13, 254 };
+byte server[] = { 54, 207, 33, 174 }; // IP Publico del servidor WAPOSAT
 EthernetClient client;
+//----------------------------------------------------------------------------------------------------
+
 float value;
 // Definicion de variable ph
 //char  Ph;
 float Ph;
+
 //----------------------------------------------------------------------------------------------------
 void setup()
 {
@@ -67,9 +72,9 @@ void setup()
   pinMode(Pin_x, OUTPUT);           //Set the digital pin as output.
   pinMode(Pin_y, OUTPUT);          //Set the digital pin as output.
   myserial.begin(9600);             //Set the soft serial port to 9600
-//-----------------configuracion de serial pc---------------------------------------------------------
-  Serial.begin(9600);  
-  Ethernet.begin(mac, ip); // inicializa ethernet shield
+//-----------------configuracion de serial pc---------------------------------------------------------  
+  Ethernet.begin(mac, ip, dns, gateway); // inicializa ethernet shield
+  Serial.begin(9600);
   delay(1000); // espera 1 segundo despues de inicializar
 
 }
@@ -105,27 +110,27 @@ void loop()
   
   Serial.println("Conectando..");
 
-  if (client.connect(server,80)>0) {  // Se conecta al servidor
-    client.print("GET /WAPOSAT3/Template/InsertData2.php?sensor1=1&equipo=2&sensor2=2&sensor3=3&valor3=4&valor1="); // Envia los datos utilizando GET
+  if (client.connect(server,80)) {  // Se conecta al servidor
+    client.print("GET /WAPOSAT3/Template/InsertData2.php?equipo=2&sensor1=1&sensor2=2&valor1="); // Envia los datos utilizando GET
     client.print(sensordata);
     client.print("&valor2=");
     client.print(T);
     client.println(" HTTP/1.0");
-    client.println("User-Agent: Arduino 1.0");
+    //client.println("User-Agent: Arduino 1.0");
     client.println();
-    Serial.println("Conexion exitosa");
+    //Serial.println("Conexion exitosa");
   }
   else
   {
     Serial.println("Falla en la conexion");
   }
-  if (client.connected()) {}
-  else {
-    Serial.println("Desconectado");
+  if (!client.connected()) {
+    client.stop();
+    delay(300000);
   }
-  client.stop();
-  client.flush();
-  delay(5000); // espera 5 minutos antes de volver a sensar la temperatura
+  //client.stop();
+  //client.flush();
+  //delay(5000); // espera 5 minutos antes de volver a sensar la temperatura
 
  //------------------------resetea el buffer serial---------------------------------------- 
   myserial.flush();

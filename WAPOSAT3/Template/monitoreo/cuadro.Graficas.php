@@ -24,7 +24,7 @@ $NameEstation = "Estacion CITRAR-UNI"
 
     $(function(){
         $("#MTemp").click(function(){
-            GenerateChart (1, 1, 5000, "myChart", 2);
+            GenerateChart (1, 2, 5000, "myChart", 2);
         });
     });
   
