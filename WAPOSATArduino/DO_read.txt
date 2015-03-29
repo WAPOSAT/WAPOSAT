@@ -1,0 +1,57 @@
+#include <SoftwareSerial.h>
+#define rx 2
+#define tx 3 
+
+SoftwareSerial myserial(rx, tx);
+char DO_data[30];
+byte received_from_sensor=0;
+byte string_received=0;
+//float DO_float=0;
+//float sat_float=0;
+//char *DO;
+//char *sat;
+
+void setup(){
+ Serial.begin(9600);
+ myserial.begin(9600);
+ }
+ 
+void loop(){ 
+ if(myserial.available() > 0){
+ received_from_sensor=myserial.readBytesUntil(13,DO_data,20);
+ DO_data[received_from_sensor]=0;
+ string_received=1;
+ if((DO_data[0] >= 48) && (DO_data[0] <=57)){
+ pars_data();
+ }
+ else
+ Serial.println(DO_data);
+ }
+ } 
+ 
+void pars_data()
+{
+// byte i;
+// byte pars_flag=0;
+// for(i=0;i<=received_from_sensor;i++)
+// {
+// if(DO_data[i]==','){pars_flag=1;}
+// }
+// 
+// if(pars_flag){
+// DO=strtok(DO_data, ",");
+// sat=strtok(NULL, ",");
+// Serial.print("DO:");
+// Serial.println(DO);
+// //DO_float=atoi(DO);
+// Serial.print("%sat:");
+// Serial.println(sat);
+// //sat_float=atoi(sat);
+// }
+// else
+// {
+ Serial.print("DO:");
+ Serial.println(DO_data);
+ //}
+ }
+ 
