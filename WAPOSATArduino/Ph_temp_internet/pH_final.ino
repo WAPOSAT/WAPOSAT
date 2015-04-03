@@ -1,15 +1,11 @@
-
 //--------------------------------------------WAPOSAT----------------------------------------------------
 #include <SPI.h>
 #include <Ethernet.h>
 #include <SoftwareSerial.h>         //Include the software serial library 
-#include <LiquidCrystal.h>
 #define rx 2                        //define what pin rx is going to be
 #define tx 3                        //define what pin tx is going to be
 #include <stdio.h>
 #include <math.h>
-//---------------------------LCD-------------------------------------------------------------------------
-LiquidCrystal lcd(12, 11, 10, 9, 8, 7);
 //---------------------------comunicacion serial con sensor-------------------------------------------
 SoftwareSerial myserial(rx, tx);    //define how the soft serial port is going to work.
 int Pin_x = 5;                      //Arduino pin 5 to control pin X
@@ -43,97 +39,66 @@ byte sensor_bytes_received=0;       //We need to know how many characters bytes 
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 byte ip[] = { 172, 16, 13, 177 };
 byte gateway[] = { 172, 16, 13, 254 };
-byte server[] = { 54, 207, 33, 174 }; // IP Publico del servidor WAPOSAT
+byte server[] = { 45, 55, 150, 245 }; // IP Publico del servidor WAPOSAT
+//byte server[] = { 172, 16, 13, 1 }; // IPServidor LAN
+
+boolean lastConnected = false;                 // state of the connection last time through the main loop
 EthernetClient client;
 //----------------------------------------------------------------------------------------------------
 
 float value;
-// Definicion de variable ph
-//char  Ph;
-float Ph;
 
 //----------------------------------------------------------------------------------------------------
 void setup()
 {
-//----------------donfiguracion lcd-------------------------------------------------------------------
-  lcd.begin(16, 2);
-  lcd.print("WAPOSAT");
-  lcd.setCursor(0, 1);
-  lcd.print("Midiendo Ph Y T");
-  
-  delay(2000);
 //------------------------entrada analogica y alimentacion 5v--------------------------------------------------------------
   pinMode(temp,OUTPUT); 
   pinMode(analogPin, INPUT);    // configurando al puesto A0 como entrada analogica
   //hallando los parametros de la temperatura
   beta=(log(RT2/R0))/((1/T2)-(1/T0));
   Rinf=R0*exp(-beta/T0);
+//-----------------configuracion de serial pc---------------------------------------------------------  
+  //Ethernet.begin(mac); // inicializa ethernet shield para un DHCP
+  Ethernet.begin(mac, ip, dns, gateway); // inicializa ethernet shield
+  Serial.begin(9600);
 //-----------------configuracion de serial sensor-----------------------------------------------------
   pinMode(Pin_x, OUTPUT);           //Set the digital pin as output.
   pinMode(Pin_y, OUTPUT);          //Set the digital pin as output.
   myserial.begin(9600);             //Set the soft serial port to 9600
-//-----------------configuracion de serial pc---------------------------------------------------------  
-  Ethernet.begin(mac, ip, dns, gateway); // inicializa ethernet shield
-  Serial.begin(9600);
+
   delay(1000); // espera 1 segundo despues de inicializar
 
 }
 
 void loop()
 {
-//-----------------------sensor de pH------------------------------------------------------------------  
-      open_channel();                            //Call the function "open_channel" to open the correct data path
-      myserial.print('r');                      //Send the command from the computer to the Atlas Scientific device using the softserial port                                     
-      myserial.print("\r");
-       
-      sensor_bytes_received=myserial.readBytesUntil(13,sensordata,30); //we read the data sent from the Atlas Scientific device until we see a <CR>. We also count how many character have been received 
-      sensordata[sensor_bytes_received]=0;            //we add a 0 to the spot in the array just after the last character we received. This will stop us from transmitting incorrect data that may have been left in the buffer
-      Serial.println(sensordata); 
-//------------------------sensor de temperatura-------------------------------------------------------
-     T = read_temp();       //call the function “read_temp” and return the temperature in C°
-     Serial.println(T);     //print the temperature data
-     delay(1000);           //wait 1000ms before we do it again
-      
-//--------------------------LCD------------------------------------------------ 
-  //Ph = 7;
-  
-  lcd.setCursor(0,0);
-  lcd.print("Ph:");
-  lcd.setCursor(0, 1);
-  lcd.print(T);
-  lcd.print(" Ph");
-  delay(1000);
-  borrar_lcd();
- 
-  
- // myserial.flush();
-  
-  Serial.println("Conectando..");
-
-  if (client.connect(server,80)) {  // Se conecta al servidor
-    client.print("GET /WAPOSAT3/Template/InsertData2.php?equipo=2&sensor1=1&sensor2=2&valor1="); // Envia los datos utilizando GET
-    client.print(sensordata);
-    client.print("&valor2=");
-    client.print(T);
-    client.println(" HTTP/1.0");
-    //client.println("User-Agent: Arduino 1.0");
-    client.println();
-    //Serial.println("Conexion exitosa");
+        
+//-----------------------conectando al servidor--------------------------------------------------------  
+  //Serial.println("Conectando...");
+  // if there's incoming data from the net connection.
+  // send it out the serial port.  This is for debugging
+  // purposes only:
+  if (client.available()) {
+    char c = client.read();
+    Serial.print(c);
   }
-  else
-  {
-    Serial.println("Falla en la conexion");
-  }
-  if (!client.connected()) {
+  // if there's no net connection, but there was one last time
+  // through the loop, then stop the client:
+  if (!client.connected() && lastConnected) {
+    Serial.println();
+    Serial.println("disconnecting.");
     client.stop();
-    delay(300000);
   }
-  //client.stop();
-  //client.flush();
-  //delay(5000); // espera 5 minutos antes de volver a sensar la temperatura
+  // if you're not connected, and ten seconds have passed since
+  // your last connection, then connect again and send data:
+  //if(!client.connected() && (millis() - lastConnectionTime > postingInterval)) {
+  if(!client.connected()) {  
+    httpRequest();
+  }
+  // store the state of the connection for next time through
+  // the loop:
+  lastConnected = client.connected();
 
- //------------------------resetea el buffer serial---------------------------------------- 
-  myserial.flush();
 }
 
 //----------------funcion de coneccion al canal 1------------------------------------------------------------------
@@ -141,16 +106,6 @@ void open_channel(){                                  //This function controls w
          digitalWrite(Pin_x, LOW);                   //Pin_x and pin_y control what channel opens 
          digitalWrite(Pin_y, LOW);                   //Pin_x and pin_y control what channel opens 
       }
-//----------------borrar lcd---------------------------------------------------------------------------------------
-
-void borrar_lcd()
-{
-  delay(2000);
-  lcd.setCursor(0,0);
-  lcd.print("                ");
-  lcd.setCursor(0, 1);
-  lcd.print("                ");
-}
 
 //---------------funcion de sensor de temperatura-------------------------------------------------------------------
 float read_temp(void){
@@ -172,3 +127,46 @@ return TempC;             //send back the temp
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+
+// this method makes a HTTP connection to the server:
+void httpRequest() {
+  // if there's a successful connection:
+  if (client.connect(server, 80)) {
+    Serial.println("connecting...");
+    LecturaSensores();
+    // send the HTTP PUT request:
+    client.print("GET /WAPOSAT3/Template/InsertData2.php?equipo=1&sensor1=1&sensor2=2&valor1="); // Envia los datos utilizando GET
+    client.print(sensordata);
+    client.print("&valor2=");
+    client.print(T);
+    client.println(" HTTP/1.0");
+    client.println();
+    
+    myserial.flush();
+    // note the time that the connection was made:
+    //lastConnectionTime = millis()/1000;
+    delay(300000);
+  } 
+  else {
+    // if you couldn't make a connection:
+    Serial.println("connection failed");
+    Serial.println("disconnecting.");
+    client.stop();
+  }
+}
+
+void LecturaSensores() {
+  //-----------------------sensor de pH------------------------------------------------------------------  
+      open_channel();                            //Call the function "open_channel" to open the correct data path
+      myserial.print('r');                      //Send the command from the computer to the Atlas Scientific device using the softserial port                                     
+      myserial.print("\r");
+       
+      sensor_bytes_received=myserial.readBytesUntil(13,sensordata,30); //we read the data sent from the Atlas Scientific device until we see a <CR>. We also count how many character have been received 
+      sensordata[sensor_bytes_received]=0;            //we add a 0 to the spot in the array just after the last character we received. This will stop us from transmitting incorrect data that may have been left in the buffer
+      Serial.println(sensordata); 
+//------------------------sensor de temperatura-------------------------------------------------------
+     T = read_temp();       //call the function “read_temp” and return the temperature in C°
+     Serial.println(T);     //print the temperature data
+     delay(1000);           //wait 1000ms before we do it again
+  
+}

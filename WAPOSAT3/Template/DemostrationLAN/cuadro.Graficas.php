@@ -18,13 +18,13 @@ $NameEstation = "Estaci&oacute;n de PRUEBA";
   
   $(function(){
         $("#MPH").click(function(){
-            GenerateChart (2, 1, 5000, "myChart", 1);
+            GenerateChart (1, 1, 5000, "myChart", 1);
         });
     });
 
     $(function(){
         $("#MTemp").click(function(){
-            GenerateChart (2, 2, 5000, "myChart", 2, "#LastData");
+            GenerateChart (1, 2, 5000, "myChart", 2, "#LastData");
         });
     });
   

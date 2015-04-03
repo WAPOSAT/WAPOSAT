@@ -38,13 +38,13 @@ byte sensor_bytes_received=0;       //We need to know how many characters bytes 
 
 //----------------------------configuracion shell ethernet----------------------------------------------------------
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-//byte ip[] = { 172, 16, 13, 177 };
-//byte gateway[] = { 172, 16, 13, 254 };
+byte ip[] = { 172, 16, 13, 177 };
+byte gateway[] = { 172, 16, 13, 254 };
 byte server[] = { 45, 55, 150, 245 }; // IP Publico del servidor WAPOSAT
 
-unsigned long lastConnectionTime = 0;          // last time you connected to the server, in milliseconds
+//unsigned long lastConnectionTime = 0;          // last time you connected to the server, in milliseconds
 boolean lastConnected = false;                 // state of the connection last time through the main loop
-const unsigned long postingInterval = 60*1000;  // delay between updates, in milliseconds
+//const unsigned long postingInterval = 60*1000;  // delay between updates, in milliseconds
 
 EthernetClient client;
 //----------------------------------------------------------------------------------------------------
@@ -65,8 +65,8 @@ void setup()
   beta=(log(RT2/R0))/((1/T2)-(1/T0));
   Rinf=R0*exp(-beta/T0);
 //-----------------configuracion de serial pc---------------------------------------------------------  
-  //Ethernet.begin(mac, ip, dns, gateway); // inicializa ethernet shield
-  Ethernet.begin(mac); // inicializa ethernet shield
+  Ethernet.begin(mac, ip, dns, gateway); // inicializa ethernet shield
+  //Ethernet.begin(mac); // inicializa ethernet shield
   Serial.begin(9600);
   delay(1000); // espera 1 segundo despues de inicializar
 //-----------------configuracion de serial sensor-----------------------------------------------------
@@ -79,7 +79,7 @@ void loop()
 {
       
 //-----------------------conectando al servidor--------------------------------------------------------  
-  Serial.println("Conectando...");
+  //Serial.println("Conectando...");
   // if there's incoming data from the net connection.
   // send it out the serial port.  This is for debugging
   // purposes only:
@@ -96,7 +96,8 @@ void loop()
   }
   // if you're not connected, and ten seconds have passed since
   // your last connection, then connect again and send data:
-  if(!client.connected() && (millis() - lastConnectionTime > postingInterval)) {
+  //if(!client.connected() && (millis() - lastConnectionTime > postingInterval)) {
+  if(!client.connected()) {  
     httpRequest();
   }
   // store the state of the connection for next time through
@@ -139,7 +140,8 @@ void httpRequest() {
     client.println();
 
     // note the time that the connection was made:
-    lastConnectionTime = millis();
+    //lastConnectionTime = millis();
+    delay(60000);
   } 
   else {
     // if you couldn't make a connection:

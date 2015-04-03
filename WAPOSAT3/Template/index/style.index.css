@@ -28,6 +28,13 @@
     font-weight: 700;
 }
 
+.text-vertical-center h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 3em;
+    font-weight: 700;
+}
+
 .text-vertical-center a {
     text-decoration: none;
     color: #fff;
@@ -200,15 +207,14 @@ hr.small {
     opacity: 0.8;
 }
 
-/* Call to Action */
+/* Premios */
 
-.call-to-action {
-    padding: 50px 0;
-}
+.premios {
+    display: table;
+    width: 100%;
+    color: #fff;
+    }
 
-.call-to-action .btn {
-    margin: 10px;
-}
 
 /* Map */
 
