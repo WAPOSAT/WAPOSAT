@@ -120,7 +120,48 @@
     
     <!-- Tablero de Informacion -->
     <div class="col-md-12 col-xs-12" id="InformacionCuadro" >
-        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-12 col-md-4">
+                        <div class="media">
+                          <div class="media-left">
+                            <i class="fa fa-arrow-circle-up fa-4x "></i>
+                          </div>
+                          <div class="media-body">
+                            <h4 class="media-heading">Media heading</h4>
+                            ...
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-md-4">
+                        <div class="media">
+                          <div class="media-left">
+                            <i class="fa fa-arrow-circle-up fa-4x "></i>
+                          </div>
+                          <div class="media-body">
+                            <h4 class="media-heading">Media heading</h4>
+                            ...
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-md-4">
+                        <div class="media">
+                          <div class="media-left">
+                            <i class="fa fa-arrow-circle-up fa-4x "></i>
+                          </div>
+                          <div class="media-body">
+                            <h4 class="media-heading">Media heading</h4>
+                            ...
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                Panel content
+            </div>
+        </div>
     </div>
     <!-- Fin Tablero de Informacion -->
     
