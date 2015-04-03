@@ -24,7 +24,7 @@ $NameEstation = "Estaci&oacute;n de PRUEBA";
 
     $(function(){
         $("#MTemp").click(function(){
-            GenerateChart (1, 2, 5000, "myChart", 2, "#LastData");
+            GenerateChart (1, 2, 5000, "myChart", 2);
         });
     });
   
@@ -54,6 +54,6 @@ $NameEstation = "Estaci&oacute;n de PRUEBA";
 </div>
 -->
 <div class="col-md-10 col-md-offset-1">
-    <canvas id="myChart"></canvas>
+    <canvas id="myChart" height="50%"></canvas>
 </div>
 

@@ -6,14 +6,9 @@ $id_parametro = 1;
 <script>
 var EstPH = 0,
     EstTemp = 0;
-
-var ArrayDataTime = {},
-   //labelsDataTime = [],
-    labelsDataTime = ["January", "February", "March", "April", "May", "June", "July"];
-    //DatasetDataTime = [],
-    DatasetDataTime = [65, 59, 80, 81, 56, 55, 40],
-    longDataTime = 7;
-
+var MyLine,     // Esta es la linea de la grafica que se presenta
+    ctx;
+    
 function GenerateChart (id_equipo, id_parametro, periodo, IdChart, parametro){
     var ArrayDataTime = {},
         ChartData = {};
@@ -39,26 +34,27 @@ function GenerateChart (id_equipo, id_parametro, periodo, IdChart, parametro){
             
             ChartData = CargarData (ArrayDataTime.DataTime,  ArrayDataTime.DataValue, LimSup, LimInf);
             $("#LastData").html("&Uacute;ltimo Valor: "+ArrayDataTime.DataValue[ArrayDataTime.long-1]);
-            var ctx = document.getElementById(IdChart).getContext("2d");
-            var MyLine = new Chart(ctx).Line(ChartData, {animation: true, responsive: true});
-            GenerateAnimationChart (MyLine, id_equipo, id_parametro, LimSup, LimInf, periodo, lastID, parametro);      
+            ctx = document.getElementById(IdChart).getContext("2d");
+            //MyLine = new Chart(ctx).Line(ChartData, {animation: true, responsive: true});
+            MyLine = new Chart(ctx).Line(ChartData, {animation: true, responsive: true});
+            GenerateAnimationChart (id_equipo, id_parametro, LimSup, LimInf, periodo, lastID, parametro);      
         }
     });
 }    
 
 
-function GenerateAnimationChart (Linea, id_equipo, id_parametro, superior, inferior, periodo, lastID, parametro){
+function GenerateAnimationChart (id_equipo, id_parametro, superior, inferior, periodo, lastID, parametro){
     
     if (parametro == 1 && EstPH == 0 ){
         EstPH = 1;
         EstTemp = 0;
-        nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo, lastID ,parametro);
+        nuevo_dato (id_equipo, id_parametro, superior, inferior, periodo, lastID ,parametro);
     }
     
     if (parametro == 2 && EstTemp == 0){
         EstPH = 0;
         EstTemp = 1;
-        nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo, lastID, parametro);
+        nuevo_dato (id_equipo, id_parametro, superior, inferior, periodo, lastID, parametro);
     }
     
 }
@@ -80,7 +76,7 @@ function CargarData (labelsDataTime, DatasetDataTime, superior, inferior) {
                 pointHighlightFill : "#fff",
                 pointHighlightStroke : "rgba(220,220,220,1)",
                 data: DatasetDataTime
-            },
+            }/*,
             {
                 label: "Limite Superior",
                 fillColor: "rgba(151,187,205,0.2)",
@@ -112,13 +108,13 @@ function CargarData (labelsDataTime, DatasetDataTime, superior, inferior) {
                         }
                         return data;
                     })()
-            }
+            }*/
         ]
     };
     return data;
 }
 
-function nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo , lastID, parametro){
+function nuevo_dato (id_equipo, id_parametro, superior, inferior, periodo , lastID, parametro){
     var bucle = 1,
         ArrayNew = {},
         ArrayNewDataTime = [],
@@ -160,12 +156,12 @@ function nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo
                     for (var i=0; i<LongArrayNew; i++){
                         y = ArrayNewValues[i];
                         x = ArrayNewDataTime[i];
-                        Linea.addData([ y, LimSup, LimInf] ,x);
-                        Linea.removeData();
+                        MyLine.addData([ y, LimSup, LimInf] ,x);
+                        MyLine.removeData();
                     }
                     $("#LastData").html("&Uacute;ltimo valor: "+ArrayNewValues[LongArrayNew-1]);
                 }
-                setTimeout(function(){ nuevo_dato (Linea, id_equipo, id_parametro, superior, inferior, periodo, id_monitoreo, parametro);}, periodo);
+                setTimeout(function(){ nuevo_dato (id_equipo, id_parametro, superior, inferior, periodo, id_monitoreo, parametro);}, periodo);
             }
         });
     }

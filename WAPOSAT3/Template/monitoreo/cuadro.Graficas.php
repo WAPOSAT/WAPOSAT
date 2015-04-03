@@ -51,7 +51,7 @@ $NameEstation = "Estacion CITRAR-UNI"
   <div role="tabpanel" class="tab-pane col-md-12" id="Temperatura">temperatura <br> <canvas id="ChartTemp"></canvas></div>
 </div>
 -->
-<div class="col-md-12">
-    <canvas id="myChart"></canvas>
+<div class="col-md-10" >
+    <canvas id="myChart" > </canvas>
 </div>
 
