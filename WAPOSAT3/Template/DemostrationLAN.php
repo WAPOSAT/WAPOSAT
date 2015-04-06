@@ -16,7 +16,7 @@
     <script src="../js/Chart.js"></script>
     <script src="DemostrationLAN/DemostrationLAN.js"></script>
     <!-- <script src="monitoreo/GenericChart.js"></script> -->
-    <?php  include_once("DemostrationLAN/chart.genericGrafic.php"); ?>
+    <script src="monitoreo/CuadroMonitoreo.js"></script>
     <script>
         window.onload = function(){
            CargarCuadroGraficas ();

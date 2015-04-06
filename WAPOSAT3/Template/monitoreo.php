@@ -16,7 +16,7 @@
     <script src="../js/Chart.js"></script>
     <script src="monitoreo/monitoreo.js"></script>
     <!-- <script src="monitoreo/GenericChart.js"></script> -->
-    <?php  include_once("monitoreo/chart.genericGrafic.php"); ?>
+    <script src="monitoreo/CuadroMonitoreo.js"></script>
     
     
     

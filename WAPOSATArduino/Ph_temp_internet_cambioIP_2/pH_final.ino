@@ -42,6 +42,11 @@ byte gateway[] = { 172, 16, 13, 254 };
 byte server[] = { 45, 55, 150, 245 }; // IP Publico del servidor WAPOSAT
 //byte server[] = { 172, 16, 13, 1 }; // IPServidor LAN
 
+byte ip2[] = {172, 16, 13, 179 };
+
+int contDisconnecting = 0;
+int estateIP = 1;
+
 
 boolean lastConnected = false;                 // state of the connection last time through the main loop
 EthernetClient client;
@@ -75,10 +80,26 @@ void loop()
 {
         
 //-----------------------conectando al servidor--------------------------------------------------------  
+  
+  if (contDisconnecting>10){
+    contDisconnecting = 0;
+    Serial.println("ReiniciandoIP...");
+    if (estateIP == 1) {
+      Ethernet.begin(mac, ip2, dns, gateway);
+      estateIP = 2;
+    } else {
+      Ethernet.begin(mac, ip, dns, gateway);
+      estateIP = 1;
+    }
+    Serial.println(Ethernet.localIP());
+  }
+  
   //Serial.println("Conectando...");
   // if there's incoming data from the net connection.
   // send it out the serial port.  This is for debugging
   // purposes only:
+  
+  
   
   if (client.available()) {
     char c = client.read();
@@ -87,16 +108,19 @@ void loop()
   // if there's no net connection, but there was one last time
   // through the loop, then stop the client:
   if (!client.connected() && lastConnected) {
+    contDisconnecting = contDisconnecting+1;
     Serial.println();
     Serial.println("disconnecting.");
     client.stop();
   }
- 
+  
   // if you're not connected, and ten seconds have passed since
   // your last connection, then connect again and send data:
   //if(!client.connected() && (millis() - lastConnectionTime > postingInterval)) {
   if(!client.connected()) {  
     httpRequest();
+  } else {
+    client.stop();
   }
   // store the state of the connection for next time through
   // the loop:
@@ -136,6 +160,7 @@ void httpRequest() {
   // if there's a successful connection:
   if (client.connect(server, 80)) {
     Serial.println("connecting...");
+    contDisconnecting = 0;
     LecturaSensores();
     // send the HTTP PUT request:
     client.print("GET /index/Template/InsertData2.php?equipo=1&sensor1=1&sensor2=2&valor1="); // Envia los datos utilizando GET
@@ -152,7 +177,7 @@ void httpRequest() {
   } 
   else {
     // if you couldn't make a connection:
-//    contDisconnecting = contDisconnecting+1;
+    contDisconnecting = contDisconnecting+1;
     Serial.println("connection failed");
     Serial.println("disconnecting.");
     client.stop();
@@ -168,7 +193,7 @@ void LecturaSensores() {
       sensor_bytes_received=myserial.readBytesUntil(13,sensordata,30); //we read the data sent from the Atlas Scientific device until we see a <CR>. We also count how many character have been received 
       sensordata[sensor_bytes_received]=0;            //we add a 0 to the spot in the array just after the last character we received. This will stop us from transmitting incorrect data that may have been left in the buffer
       Serial.println(sensordata);
-//     delay(1000); 
+     delay(1000); 
 //------------------------sensor de temperatura-------------------------------------------------------
      T = read_temp();       //call the function “read_temp” and return the temperature in C°
      Serial.println(T);     //print the temperature data

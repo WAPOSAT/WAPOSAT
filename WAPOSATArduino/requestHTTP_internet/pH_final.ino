@@ -37,7 +37,7 @@ byte sensor_bytes_received=0;       //We need to know how many characters bytes 
 
 //----------------------------configuracion shell ethernet----------------------------------------------------------
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-byte ip[] = { 172, 16, 13, 177 };
+byte ip[] = { 172, 16, 13, 179 };
 byte gateway[] = { 172, 16, 13, 254 };
 byte server[] = { 45, 55, 150, 245 }; // IP Publico del servidor WAPOSAT
 //byte server[] = { 172, 16, 13, 1 }; // IPServidor LAN
@@ -136,19 +136,16 @@ void httpRequest() {
   // if there's a successful connection:
   if (client.connect(server, 80)) {
     Serial.println("connecting...");
-    LecturaSensores();
+    //LecturaSensores();
     // send the HTTP PUT request:
-    client.print("GET /index/Template/InsertData2.php?equipo=1&sensor1=1&sensor2=2&valor1="); // Envia los datos utilizando GET
-    client.print(sensordata);
-    client.print("&valor2=");
-    client.print(T);
+    client.print("GET /index/Template/InsertData2.1.php?equipo=1&sensor1=1&sensor2=2"); // Envia los datos utilizando GET
     client.println(" HTTP/1.0");
     client.println();
     
     myserial.flush();
     // note the time that the connection was made:
     //lastConnectionTime = millis()/1000;
-    delay(5000);
+    delay(300000);
   } 
   else {
     // if you couldn't make a connection:
