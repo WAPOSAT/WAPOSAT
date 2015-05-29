@@ -158,7 +158,7 @@ while($valores = $RelacionEquipo->retornar_SELECT()){
                 </div>
             </div>
             <div class="panel-body col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1" >
-                <canvas id="myChart" class="col-md-12 col-xs-10"></canvas>
+                <canvas id="myChart" class="col-md-12 col-xs-10" height="80%" ></canvas>
             </div>
         </div>
     </div>

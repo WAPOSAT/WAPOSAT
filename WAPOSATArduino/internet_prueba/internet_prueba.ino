@@ -29,7 +29,7 @@ void loop()
   //Serial.println("connecting...");
   if (client.connect(server, 80)) {
     Serial.println("connected");
-    client.print("GET /WAPOSAT3/Template/InsertData.php?equipo=1&sensor=1&valor=");
+    client.print("GET /MAYQA/Template/InsertData.php?equipo=1&sensor=1&valor=");
     client.print(celsius);
     client.println(" HTTP/1.0");
     //client.println("User-Agent: Arduino 1.0");
@@ -49,7 +49,7 @@ void loop()
   //  Serial.println("disconnecting.");
     client.stop();
     //for(;;);
-    delay(60000);
+    delay(5000);
   }
   
 }

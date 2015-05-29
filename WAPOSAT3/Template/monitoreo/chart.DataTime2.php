@@ -41,7 +41,11 @@ while($valores = $monitoreo->retornar_SELECT()){
         $valMin = $valores["valor"];
     }
     $firstVal = $valores["valor"];
-    $fechaModificada = substr($valores["fecha"], 11);
+    $datetmp = strtotime($valores["fecha"]);
+    $horatmp = date('H',$datetmp)-1;
+    $minutotmp = date('i',$datetmp);
+    $segundotmp = date('s',$datetmp);
+    $fechaModificada = $horatmp.":".$minutotmp.":".$segundotmp;
     $fechaModificada = "".$fechaModificada;
     array_push($DataTime, $fechaModificada);
     array_push($DataValue, $valores["valor"]);
@@ -58,7 +62,7 @@ while($valores = $monitoreo->retornar_SELECT()){
 $date = strtotime($date);
 $mesText = $months[date('n', $date)-1];
 $dia = date('d', $date);
-$hora = date('H', $date);
+$hora = date('H', $date)-1;
 $fechaText = "Dia: ".$mesText."-".$dia." ".$hora."horas";
 
 

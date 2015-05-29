@@ -32,15 +32,18 @@ float TempK=0.0;   // [K]        temperatura de salida en Kelvin
 float TempC=0.0;   // [ºC]       temperatura de salida en Celsius
 
 //---------------------------datos de sensor----------------------------------------------------------
-char sensordata[30];  //A 30 byte character array to hold incoming data from the sensors
-byte sensor_bytes_received=0;       //We need to know how many characters bytes have been received
+char sensordata1[30];  //A 30 byte character array to hold incoming data from the sensors
+byte sensor_bytes_received1=0;       //We need to know how many characters bytes have been received
+
+char sensordata2[30];  //A 30 byte character array to hold incoming data from the sensors
+byte sensor_bytes_received2=0;       //We need to know how many characters bytes have been received
 
 //----------------------------configuracion shell ethernet----------------------------------------------------------
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 byte ip[] = { 172, 16, 13, 177 };
 byte gateway[] = { 172, 16, 13, 254 };
-//byte server[] = { 45, 55, 150, 245 }; // IP Publico del servidor WAPOSAT
-byte server[] = { 172, 16, 13, 1 }; // IPServidor LAN
+byte server[] = { 45, 55, 150, 245 }; // IP Publico del servidor WAPOSAT
+//byte server[] = { 172, 16, 13, 1 }; // IPServidor LAN
 
 
 boolean lastConnected = false;                 // state of the connection last time through the main loop
@@ -105,9 +108,15 @@ void loop()
 }
 
 //----------------funcion de coneccion al canal 1------------------------------------------------------------------
-void open_channel(){                                  //This function controls what UART port is opened.                                                      //If *channel==1 then we open channel 1     
+void open_channel1(){        //This function controls what UART port is opened.                                                      //If *channel==1 then we open channel 1     
+         myserial.flush();
          digitalWrite(Pin_x, LOW);                   //Pin_x and pin_y control what channel opens 
          digitalWrite(Pin_y, LOW);                   //Pin_x and pin_y control what channel opens 
+      }
+void open_channel2(){
+         myserial.flush();
+         digitalWrite(Pin_x, LOW);                   //Pin_x and pin_y control what channel opens 
+         digitalWrite(Pin_y, HIGH);                   //Pin_x and pin_y control what channel opens 
       }
 
 //---------------funcion de sensor de temperatura-------------------------------------------------------------------
@@ -138,10 +147,12 @@ void httpRequest() {
     Serial.println("connecting...");
     LecturaSensores();
     // send the HTTP PUT request:
-    client.print("GET /WAPOSAT3/Template/InsertData2.php?equipo=1&sensor1=1&sensor2=2&valor1="); // Envia los datos utilizando GET
-    client.print(sensordata);
+    client.print("GET /index/Template/InsertData3.php?equipo=4&sensor1=1&sensor2=2&sensor3=3&valor1="); // Envia los datos utilizando GET
+    client.print(sensordata1);
     client.print("&valor2=");
     client.print(T);
+    client.print("&valor3=");
+    client.print(sensordata2);
     client.println(" HTTP/1.0");
     client.println();
     
@@ -161,15 +172,27 @@ void httpRequest() {
 
 void LecturaSensores() {
   //-----------------------sensor de pH------------------------------------------------------------------  
-      open_channel();                            //Call the function "open_channel" to open the correct data path
+      open_channel1();                            //Call the function "open_channel" to open the correct data path
+      delay(1000);
       myserial.print('r');                      //Send the command from the computer to the Atlas Scientific device using the softserial port                                     
       myserial.print("\r");
        
-      sensor_bytes_received=myserial.readBytesUntil(13,sensordata,30); //we read the data sent from the Atlas Scientific device until we see a <CR>. We also count how many character have been received 
-      sensordata[sensor_bytes_received]=0;            //we add a 0 to the spot in the array just after the last character we received. This will stop us from transmitting incorrect data that may have been left in the buffer
-      Serial.println(sensordata);
-//     delay(1000); 
-//------------------------sensor de temperatura-------------------------------------------------------
+      sensor_bytes_received1=myserial.readBytesUntil(13,sensordata1,30); //we read the data sent from the Atlas Scientific device until we see a <CR>. We also count how many character have been received 
+      sensordata1[sensor_bytes_received1]=0;            //we add a 0 to the spot in the array just after the last character we received. This will stop us from transmitting incorrect data that may have been left in the buffer
+      Serial.println(sensordata1);
+       
+  //-----------------------sensor de DO------------------------------------------------------------------  
+      open_channel2();                            //Call the function "open_channel" to open the correct data path
+      delay(1000);
+      myserial.print('r');                      //Send the command from the computer to the Atlas Scientific device using the softserial port                                     
+      myserial.print("\r");
+       
+      sensor_bytes_received2=myserial.readBytesUntil(13,sensordata2,30); //we read the data sent from the Atlas Scientific device until we see a <CR>. We also count how many character have been received 
+      sensordata2[sensor_bytes_received2]=0;            //we add a 0 to the spot in the array just after the last character we received. This will stop us from transmitting incorrect data that may have been left in the buffer
+      Serial.println(sensordata2);
+      
+
+  //------------------------sensor de temperatura-------------------------------------------------------
      T = read_temp();       //call the function “read_temp” and return the temperature in C°
      Serial.println(T);     //print the temperature data
      delay(1000);           //wait 1000ms before we do it again
