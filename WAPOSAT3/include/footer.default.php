@@ -6,8 +6,8 @@
                 <h4><strong>WAPOSAT S.A.C.</strong>
                 </h4>
                 <ul class="list-unstyled">
-                    <li><i class="fa fa-phone fa-fw"></i> (51)-944271772</li>
-                    <li><i class="fa fa-envelope-o fa-fw"></i>waposatinc@gmail.com
+                    <!-- <li><i class="fa fa-phone fa-fw"></i> (51)-944271772</li> -->
+                    <li><i class="fa fa-envelope-o fa-fw"></i>jhosept@gmail.com
                     </li>
                 </ul>
                 <br>
