@@ -42,8 +42,8 @@ byte sensor_bytes_received2=0;       //We need to know how many characters bytes
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 byte ip[] = { 172, 16, 13, 177 };
 byte gateway[] = { 172, 16, 13, 254 };
-byte server[] = { 45, 55, 150, 245 }; // IP Publico del servidor WAPOSAT
-//byte server[] = { 172, 16, 13, 1 }; // IPServidor LAN
+//byte server[] = { 45, 55, 150, 245 }; // IP Publico del servidor WAPOSAT
+byte server[] = { 172, 16, 13, 1 }; // IPServidor LAN
 
 
 boolean lastConnected = false;                 // state of the connection last time through the main loop
@@ -147,7 +147,8 @@ void httpRequest() {
     Serial.println("connecting...");
     LecturaSensores();
     // send the HTTP PUT request:
-    client.print("GET /index/Template/InsertData3.php?equipo=4&sensor1=1&sensor2=2&sensor3=3&valor1="); // Envia los datos utilizando GET
+    //client.print("GET /index/Template/InsertData3.php?equipo=4&sensor1=1&sensor2=2&sensor3=3&valor1="); // Envia los datos utilizando GET
+    client.print("GET /WAPOSAT3/Template/InsertData3.php?equipo=4&sensor1=1&sensor2=2&sensor3=3&valor1="); // Envia los datos LAN
     client.print(sensordata1);
     client.print("&valor2=");
     client.print(T);
