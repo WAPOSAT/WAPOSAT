@@ -121,6 +121,9 @@ while($valores = $RelacionEquipo->retornar_SELECT()){
     <!-- Fin del Tablero de Configuracion -->
     
     <!-- Zona de Avisos del Cuadro -->
+    <div class="col-md-12 col-xs-12" >
+        <p>Limites máximos establecidos por la Organización Mundial de la Salud.</p>
+    </div>
     <div class="col-md-12 col-xs-12" id="AvisosCuadro">
         
     </div>
@@ -158,7 +161,7 @@ while($valores = $RelacionEquipo->retornar_SELECT()){
                 </div>
             </div>
             <div class="panel-body col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1" >
-                <canvas id="myChart" class="col-md-12 col-xs-10" height="80%" ></canvas>
+                <canvas id="myChart" class="col-md-12 col-xs-10"></canvas>
             </div>
         </div>
     </div>

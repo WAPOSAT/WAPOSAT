@@ -21,11 +21,3 @@ body {
 footer {
     padding: 100px 0;
 }
-
-/* Alineacion vertical */
-
-.vcenter {
-    display: inline-block;
-    vertical-align: middle;
-    float: none;
-}
