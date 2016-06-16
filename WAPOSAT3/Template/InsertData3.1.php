@@ -46,5 +46,5 @@ $monitoreo->registrar_valor($id_sensor1, $id_equipo, $valor1);
 $monitoreo->registrar_valor($id_sensor2, $id_equipo, $valor2);
 $monitoreo->registrar_valor($id_sensor3, $id_equipo, $valor3);
 //$monitoreo->registrar_valor($id_sensor3, $id_equipo, $valor3);
-//echo "se ha finalizado correctamente";
+echo "hola mundo ;)";
 ?>
